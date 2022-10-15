@@ -1,4 +1,4 @@
-const webSocketsServerPort = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 //const webSocketServer = require('websocket').server;
 //const http = require('http');
 
@@ -9,7 +9,9 @@ app.get('/',(req,res) => {
   res.send('hello world');
 })
 
-app.listen(webSocketsServerPort);
+app.listen(port, () => {
+  console.log('started listening on portt ' + port)
+});
 
 // const server = http.createServer();
 // server.listen(webSocketsServerPort);
