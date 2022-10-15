@@ -1,6 +1,7 @@
 const webSocketsServerPort = process.env.PORT || 8000;
 const webSocketServer = require('websocket').server;
 const http = require('http');
+const { client } = require('websocket');
 
 const server = http.createServer();
 server.listen(webSocketsServerPort);
@@ -34,7 +35,8 @@ wsServer.on('request', function (request) {
       // broadcasting message to all connected clients
       for (key in clients) {
         clients[key].sendUTF(message.utf8Data);
-        // console.log('sent Message to: ', clients[key]);
+        console.log('sent Message to: ', clients[key]);
+        console.log('list of clients' + clients);
       }
     }
   })
