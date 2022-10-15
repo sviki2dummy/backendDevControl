@@ -1,5 +1,5 @@
-const port = process.env.PORT || 8000;  //heroku ili localhost
-// const port = '0.0.0.0' || 8000; //render ili localhost
+const port = process.env.PORT || 8000;
+// const port = '0.0.0.0'
 
 
 const express = require('express');
@@ -10,6 +10,6 @@ app.get('/',(req,res) => {
   res.send('hello world!!!');
 });
 
-app.listen('0.0.0.0', () => {
+app.listen(port, () => {
   console.log('started listening on portt ' + port)
 });
