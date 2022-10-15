@@ -15,6 +15,5 @@ app.get('/x',(req,res) => {
   res.send('xReq');
 });
 
-app.listen(port, () => {
-  console.log('started listening on portt ' + port)
-});
+
+//
