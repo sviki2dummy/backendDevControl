@@ -13,7 +13,7 @@ const wsServer = new webSocketServer({
 
 
 const clients = {};
-
+console.log('started instance');
 const getUniqueID = () => {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   return s4() + s4() + '-' + s4();
@@ -27,7 +27,6 @@ wsServer.on('request', function (request) {
   clients[userID] = connection;
   console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients));
 
-
   connection.on('message', function (message) {
     if (message.type === 'utf8') {
       console.log('Received Message: ', message.utf8Data);
@@ -36,7 +35,6 @@ wsServer.on('request', function (request) {
       for (key in clients) {
         clients[key].sendUTF(message.utf8Data);
         console.log('sent Message to: ', clients[key]);
-        console.log('list of clients' + clients);
       }
     }
   })
