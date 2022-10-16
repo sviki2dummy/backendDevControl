@@ -1,11 +1,5 @@
 const port = process.env.PORT || 8000;
 
-
-const webSocketServer = require('websocket').server;
-const http = require('http');
-const { client } = require('websocket');
-
-
 const express = require('express');
 const app = express();
 
@@ -22,6 +16,20 @@ app.get('/x',(req,res) => {
 app.listen(port, () => {
   console.log('started listening on portt ' + port)
 });
+
+const webSocketServer = require('websocket').server;
+const http = require('http');
+const { client } = require('websocket');
+
+const server = http.createServer();
+server.listen(port);
+console.log('listening on port ' + port);
+
+const wsServer = new webSocketServer({
+  httpServer: server,
+});
+
+
 
 const clients = {};
 
