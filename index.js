@@ -12,10 +12,6 @@ const wsServer = new webSocketServer({
   httpServer: server,
 });
 
-server.listen(port, () => {
-  console.log('listening on port ' + port);
-});
-
 //API
 app.get('/',(req,res) => {
   console.log('request:/');
@@ -45,7 +41,7 @@ const getUniqueID = () => {
 };
 
 
-server.on('message', function (request) {
+server.on('request', function (request) {
   var userID = getUniqueID();
   console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
   const connection = request.accept(null, request.origin);
@@ -63,3 +59,7 @@ server.on('message', function (request) {
   })
 });
 //END WSS
+
+server.listen(port, () => {
+  console.log('listening on port ' + port);
+});
