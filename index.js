@@ -6,7 +6,7 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
-const server = http.createServer();
+const server = http.createServer(app);
 
 const wsServer = new webSocketServer({
   httpServer: server,
@@ -41,7 +41,7 @@ const getUniqueID = () => {
 };
 
 
-server.on('request', function (request) {
+wsServer.on('request', function (request) {
   var userID = getUniqueID();
   console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
   const connection = request.accept(null, request.origin);
