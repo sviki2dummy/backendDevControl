@@ -27,6 +27,11 @@ app.get('/x',(req,res) => {
   res.send('xReq');
 });
 
+app.get('/combo',(req,res) => {
+  console.log('request:/combo');
+  res.send('xReq');
+});
+
 
 //END API
 
