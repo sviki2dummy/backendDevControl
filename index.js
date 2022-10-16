@@ -25,7 +25,7 @@ app.get('/x',(req,res) => {
 
 app.get('/combo',(req,res) => {
   console.log('request:/combo');
-  res.send('xReq');
+  res.send('combo');
 });
 
 
