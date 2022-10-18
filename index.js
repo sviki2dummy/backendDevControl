@@ -63,3 +63,11 @@ wsServer.on('request', function (request) {
 server.listen(port, () => {
   console.log('listening on port ' + port);
 });
+
+
+const firestore = require('./firestoreDB/firestore');
+firestore.updateDocumentValue('users','Kristian', {name: 'Kristian'});
+// firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
+// firestore.setDocumentValue('users','Kristian', {});
+// firestore.deleteDocument('users','Kristian');
+// firestore.updateDocumentValue('users/users2/users3','users4', {name: 'Kristian'});
