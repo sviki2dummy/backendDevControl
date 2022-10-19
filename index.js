@@ -44,6 +44,8 @@ app.get('/update',(req,res) => {
 
 });
 
+const mainRouter = require('./expressRouters/expressRouter');
+app.use('/API', mainRouter);
 
 //END API
 
@@ -55,7 +57,6 @@ const getUniqueID = () => {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   return s4() + s4() + '-' + s4();
 };
-
 
 wsServer.on('request', function (request) {
   var userID = getUniqueID();
