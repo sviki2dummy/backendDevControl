@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+let router = express.Router();
 
 router.get('/X',(req,res) => {
     res.send('hello');
