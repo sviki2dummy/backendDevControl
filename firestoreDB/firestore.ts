@@ -1,10 +1,6 @@
 
 var admin = require('firebase-admin');
 
-console.log('env');
-console.log(JSON.stringify(process.env));
-console.log(JSON.stringify(process.env.firebaseKey));
-
 var serviceAccount = process.env.firebaseKey;
 
 if(!serviceAccount){
@@ -14,7 +10,7 @@ if(!serviceAccount){
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 })
-const db = admin.firestore();
+let db = admin.firestore();
 
 
 async function getColletionRef(collectionPath) {
