@@ -33,12 +33,12 @@ async function deleteDocument(collectionPath, documentName) {
   return db.collection(collectionPath).doc(documentName).delete();
 }
 
-module.exports.getColletionRef = getColletionRef;
-module.exports.getDocumentRef = getDocumentRef;
-module.exports.setDocumentValue = setDocumentValue;
-module.exports.updateDocumentValue = updateDocumentValue;
-module.exports.deleteDocument = deleteDocument;
+// module.exports.getColletionRef = getColletionRef;
+// module.exports.getDocumentRef = getDocumentRef;
+// module.exports.setDocumentValue = setDocumentValue;
+// module.exports.updateDocumentValue = updateDocumentValue;
+// module.exports.deleteDocument = deleteDocument;
 
 
 
-export { }
+export { getColletionRef, getDocumentRef, setDocumentValue, updateDocumentValue, deleteDocument }
