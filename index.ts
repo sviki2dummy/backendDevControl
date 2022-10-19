@@ -1,4 +1,3 @@
-export {};
 let express = require('express');
 let webSocketServer = require('websocket').server;
 let http = require('http');
