@@ -11,3 +11,5 @@ const logoutUserAuthRouter = require('./subrouter/logoutRouter');
 router.use('/logout', logoutUserAuthRouter);
 
 module.exports = router;
+
+export { }
