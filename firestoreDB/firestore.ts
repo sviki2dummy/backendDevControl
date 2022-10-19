@@ -3,7 +3,7 @@ var admin = require('firebase-admin');
 
 var serviceAccount = process.env.firebaseKey;
 
-if(!serviceAccount){
+if (!serviceAccount) {
   serviceAccount = require('../firebaseKey.json')
 }
 
@@ -17,19 +17,19 @@ async function getColletionRef(collectionPath) {
   return db.collection(collectionPath);
 }
 
-async function getDocumentRef(collectionPath, documentName){
+async function getDocumentRef(collectionPath, documentName) {
   return db.collection(collectionPath).doc(documentName);
 }
 
-async function setDocumentValue(collectionPath, documentName, value){
+async function setDocumentValue(collectionPath, documentName, value) {
   return db.collection(collectionPath).doc(documentName).set(value);
 }
 
-async function updateDocumentValue(collectionPath, documentName, value){
+async function updateDocumentValue(collectionPath, documentName, value) {
   return db.collection(collectionPath).doc(documentName).update(value);
 }
 
-async function deleteDocument(collectionPath, documentName){
+async function deleteDocument(collectionPath, documentName) {
   return db.collection(collectionPath).doc(documentName).delete();
 }
 
@@ -41,3 +41,4 @@ module.exports.deleteDocument = deleteDocument;
 
 
 
+export { }
