@@ -10,7 +10,7 @@ if(!serviceAccount){
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 })
-const db = admin.firestore();
+let db = admin.firestore();
 
 
 async function getColletionRef(collectionPath) {

@@ -6,3 +6,5 @@ router.get('/X',(req,res) => {
 })
 
 module.exports = router;
+
+export { }

@@ -8,3 +8,5 @@ router.use('/userAuth', userAuthRouter);
 //add more use-s
 
 module.exports = router;
+
+export { }

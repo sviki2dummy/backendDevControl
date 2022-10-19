@@ -1,19 +1,20 @@
-const express = require('express');
-const webSocketServer = require('websocket').server;
-const http = require('http');
+export {};
+let express = require('express');
+let webSocketServer = require('websocket').server;
+let http = require('http');
 
-const port = process.env.PORT || 8000;
+let port = process.env.PORT || 8000;
 
-const app = express();
+let app = express();
 
-const server = http.createServer(app);
+let server = http.createServer(app);
 
-const wsServer = new webSocketServer({
+let wsServer = new webSocketServer({
   httpServer: server,
 });
 
 
-const firestore = require('./firestoreDB/firestore');
+let firestore = require('./firestoreDB/firestore');
 // firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
 // firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
 // firestore.setDocumentValue('users','Kristian', {});
@@ -44,31 +45,31 @@ app.get('/update',(req,res) => {
 
 });
 
-const mainRouter = require('./expressRouters/expressRouter');
+let mainRouter = require('./expressRouters/expressRouter');
 app.use('/API', mainRouter);
 
 //END API
 
 
 //WSS
-const clients = {};
+let clients = {};
 
-const getUniqueID = () => {
-  const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+let getUniqueID = () => {
+  let s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   return s4() + s4() + '-' + s4();
 };
 
 wsServer.on('request', function (request) {
   var userID = getUniqueID();
   console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
-  const connection = request.accept(null, request.origin);
+  let connection = request.accept(null, request.origin);
   clients[userID] = connection;
   console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients));
   connection.on('message', function (message) {
     if (message.type === 'utf8') {
       console.log('Received Message: ', message.utf8Data);
       // broadcasting message to all connected clients
-      for (key in clients) {
+      for (let key in clients) {
         clients[key].sendUTF(message.utf8Data);
         console.log('sent Message to: ', key);
       }
@@ -80,5 +81,3 @@ wsServer.on('request', function (request) {
 server.listen(port, () => {
   console.log('listening on port ' + port);
 });
-
-
