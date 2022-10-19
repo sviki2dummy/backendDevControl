@@ -12,6 +12,15 @@ const wsServer = new webSocketServer({
   httpServer: server,
 });
 
+
+const firestore = require('./firestoreDB/firestore');
+// firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
+// firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
+// firestore.setDocumentValue('users','Kristian', {});
+// firestore.deleteDocument('users','Kristian'); 
+// firestore.updateDocumentValue('users/users2/users3','users4', {name: 'Kristian'});
+
+
 //API
 app.get('/',(req,res) => {
   console.log('request:/');
@@ -25,7 +34,14 @@ app.get('/x',(req,res) => {
 
 app.get('/combo',(req,res) => {
   console.log('request:/combo');
-  res.send('xReq');
+  res.send('combo');
+});
+
+app.get('/update',(req,res) => {
+  console.log('request:/update');
+  firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
+  res.send('update');
+
 });
 
 
