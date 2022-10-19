@@ -13,7 +13,7 @@ let wsServer = new webSocketServer({
 });
 
 
-let firestore = require('./firestoreDB/firestore');
+let firestore = require('./firestoreDB/firestore.ts');
 // firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
 // firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
 // firestore.setDocumentValue('users','Kristian', {});
@@ -44,7 +44,7 @@ app.get('/update',(req,res) => {
 
 });
 
-let mainRouter = require('./expressRouters/expressRouter');
+let mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);
 
 //END API
