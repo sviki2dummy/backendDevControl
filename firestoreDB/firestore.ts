@@ -41,4 +41,8 @@ async function deleteDocument(collectionPath, documentName) {
 
 
 
-export { getColletionRef, getDocumentRef, setDocumentValue, updateDocumentValue, deleteDocument }
+// export { getColletionRef }
+// export { getDocumentRef }
+// export { setDocumentValue }
+// export { updateDocumentValue }
+// export { deleteDocument }

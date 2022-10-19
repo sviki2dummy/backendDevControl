@@ -13,7 +13,7 @@ let wsServer = new webSocketServer({
 });
 
 
-let firestore = require('./firestoreDB/firestore.ts');
+// let firestore = require('./firestoreDB/firestore.ts');
 // firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
 // firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
 // firestore.setDocumentValue('users','Kristian', {});
@@ -39,7 +39,7 @@ app.get('/combo',(req,res) => {
 
 app.get('/update',(req,res) => {
   console.log('request:/update');
-  firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
+  // firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
   res.send('update');
 
 });
