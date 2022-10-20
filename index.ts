@@ -41,7 +41,6 @@ app.get('/update',(req,res) => {
   console.log('request:/update');
   firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
   res.send('update');
-
 });
 
 app.get('/ts',(req,res) => {
