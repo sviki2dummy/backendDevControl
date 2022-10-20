@@ -1,12 +1,10 @@
-const express = require('express');
-const router = express.Router();
+var express = require('express');
+var router = express.Router();
 
 
-const userAuthRouter = require('./userAuths/userAuthRouter.ts');
+var userAuthRouter = require('./userAuths/userAuthRouter.ts');
 router.use('/userAuth', userAuthRouter);
 
 //add more use-s
 
 module.exports = router;
-
-export { }
