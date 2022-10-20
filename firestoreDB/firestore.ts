@@ -1,12 +1,17 @@
 
 var admin = require('firebase-admin');
-
-var serviceAccount = process.env.firebaseKey;
-
-if (!serviceAccount) {
+var serviceAccount;
+try{
+ serviceAccount = JSON.parse(process.env.firebaseKey);
+}catch{
+  console.log('failed to get env.port.firebaseKey');
   console.log('looking for file in firebase.json')
   serviceAccount = require('../firebaseKey.json')
 }
+// if (!serviceAccount) {
+//   console.log('looking for file in firebase.json')
+//   serviceAccount = require('../firebaseKey.json')
+// }
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
