@@ -1,6 +1,6 @@
-let express = require('express');
-let webSocketServer = require('websocket').server;
-let http = require('http');
+var express = require('express');
+var webSocketServer = require('websocket').server;
+var http = require('http');
 
 let port = process.env.PORT || 8000;
 
@@ -13,7 +13,7 @@ let wsServer = new webSocketServer({
 });
 
 
-// let firestore = require('./firestoreDB/firestore.ts');
+var firestore = require('./firestoreDB/firestore.ts');
 // firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
 // firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
 // firestore.setDocumentValue('users','Kristian', {});
@@ -39,12 +39,12 @@ app.get('/combo',(req,res) => {
 
 app.get('/update',(req,res) => {
   console.log('request:/update');
-  // firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
+  firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
   res.send('update');
 
 });
 
-let mainRouter = require('./expressRouters/expressRouter.ts');
+var mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);
 
 //END API
