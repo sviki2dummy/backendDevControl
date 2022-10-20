@@ -44,6 +44,11 @@ app.get('/update',(req,res) => {
 
 });
 
+app.get('/ts',(req,res) => {
+  console.log('request:/ts');
+  res.send('typescript');
+});
+
 var mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);
 
