@@ -4,6 +4,7 @@ var admin = require('firebase-admin');
 var serviceAccount = process.env.firebaseKey;
 
 if (!serviceAccount) {
+  console.log('looking for file in firebase.json')
   serviceAccount = require('../firebaseKey.json')
 }
 
