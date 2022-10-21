@@ -1,9 +1,10 @@
 
 var admin = require('firebase-admin');
+import { CollectionReference, DocumentReference } from "firebase/firestore/lite";
 var serviceAccount;
-try{
- serviceAccount = JSON.parse(process.env.firebaseKey);
-}catch{
+try {
+  serviceAccount = JSON.parse(process.env.firebaseKey);
+} catch {
   console.log('failed to get env.port.firebaseKey');
   console.log('looking for file in firebase.json')
   serviceAccount = require('../firebaseKey.json')
@@ -19,11 +20,11 @@ admin.initializeApp({
 let db = admin.firestore();
 
 
-async function getColletionRef(collectionPath) {
+function getColletionRef(collectionPath): CollectionReference {
   return db.collection(collectionPath);
 }
 
-async function getDocumentRef(collectionPath, documentName) {
+function getDocumentRef(collectionPath, documentName): DocumentReference {
   return db.collection(collectionPath).doc(documentName);
 }
 

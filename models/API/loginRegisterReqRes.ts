@@ -1,25 +1,25 @@
-interface ILoginRequest {
+export interface ILoginRequest {
     username: string,
     password: string,
 }
 
-interface ILoginResponse {
+export interface ILoginResponse {
     userId: number,
 }
 
-interface IRegisterRequest {
+export interface IRegisterRequest {
     username: string,
     email: string,
     password: string,
 }
 
-interface IRegistrationPendingRequests {
+export interface IRegistrationPendingRequests {
     uuid: string,
     username: string,
     email: string,
     password: string,
 }
 
-interface ILogoutRequest {
+export interface ILogoutRequest {
     username: string,
 }

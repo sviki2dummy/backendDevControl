@@ -1,4 +1,4 @@
-interface IUser{
+export interface IUser{
     id: number,
     username: string,
     email: string,
@@ -6,12 +6,12 @@ interface IUser{
     deviceFields: IDeviceField[],
 }
 
-interface IDeviceFieldAccess {
+export interface IDeviceFieldAccess {
     deviceField: IDeviceField,
     viewOnly: boolean,
 }
 
-interface IDevice{
+export interface IDevice{
     id: number,
     deviceKey: number,
     deviceName: string,
@@ -19,12 +19,12 @@ interface IDevice{
     userAdminId: number,
 }
 
-interface IFieldGroup{
+export interface IFieldGroup{
     fields: IDeviceField[],
     groupName: string,
 }
 
-interface IDeviceField{
+export interface IDeviceField{
     fieldType: 'numeric' | 'text',
     field: IDeviceNumericField | IDeviceTextField,
 }
