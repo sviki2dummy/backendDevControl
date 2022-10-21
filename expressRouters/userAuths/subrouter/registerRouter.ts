@@ -4,24 +4,17 @@ var router = express.Router();
 import { IRegisterRequest } from '../../../models/API/loginRegisterReqRes'
 var userDB = require('../../../firestoreDB/users/userDB');
 
-router.post('/q', (req, res) => {
-    res.sendStatus(200);
-    console.log(req);
+router.post('/', async (req, res) => {
     console.log(req.body);
     let registerReq: IRegisterRequest = req.body;
     console.log('registerrr')
-    userDB.addUser(registerReq.username, registerReq.password);
-    res.send('OKnwe');
-})
-
-router.get('/X', (req, res) => {
-    res.send('hello');
-})
-
-router.get('/register', (req, res) => {
-    let registerReq: IRegisterRequest = req.body;
-    userDB.getAllUsers();
-    res.send('OK');
+    let id = await userDB.addUser(registerReq.username, registerReq.password, registerReq.email);
+    if(id === -1){
+        res.send('User not created');
+    }
+    else{
+        res.send('User created: ' + id);
+    }
 })
 
 

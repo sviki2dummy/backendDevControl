@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-
-router.get('/X',(req,res) => {
-    res.send('hello');
-})
+import { ILoginRequest } from '../../../models/API/loginRegisterReqRes'
+var userDB = require('../../../firestoreDB/users/userDB');
 
 
-// router.post('/login',(req,res) => {
-//     const loginReq: ILoginRequest = req.body;
-// })
+router.post('/', async (req, res) => {
+    const loginReq: ILoginRequest = req.body;
+    let id = await userDB.getUserbyCreds(loginReq.username, loginReq.password);
+    res.send(''+id);
+});
 
 module.exports = router;

@@ -35,15 +35,17 @@ async function getUsers(): Promise<IUser[]> {
     return users;
 }
 
-async function getUserbyCreds(username: string, pass: string) {
-
+async function getUserbyCreds(username: string, password: string): Promise<number> {
+    var users = await getUsers();
+    var user = users.find(user => user.username === username && user.password === password); 
+    return user?.id || -1;
 }
 
-async function addUser(username: string, password: string): Promise<boolean> {
+async function addUser(username: string, password: string, email: string): Promise<number> {
     var users = await getUsers();
     var sameNameUser = users.find(user => user.username === username);
     if (sameNameUser) {
-        throw ('sameNameUser');
+        return -1;
     }
     var maxIDdoc = firestore.getDocumentRef('IDhandlingValues', 'maxUserId');
     maxIDdoc = (await maxIDdoc.get()).data().maxUserId;
@@ -54,9 +56,10 @@ async function addUser(username: string, password: string): Promise<boolean> {
     newUser.email = '';
     firestore.setDocumentValue('IDhandlingValues', 'maxUserId', { maxUserId: newUser.id });
     firestore.setDocumentValue('users', `${newUser.id}`, newUser);
-    return true;
+    return newUser.id;
 }
 
 
 module.exports.getAllUsers = getUsers;
 module.exports.addUser = addUser;
+module.exports.getUserbyCreds = getUserbyCreds;
