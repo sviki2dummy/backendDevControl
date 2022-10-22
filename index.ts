@@ -2,7 +2,7 @@ var express = require('express');
 var webSocketServer = require('websocket').server;
 var http = require('http');
 
-let port = process.env.PORT || 8001;
+let port = process.env.PORT || 8000;
 
 let app = express();
 
