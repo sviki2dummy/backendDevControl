@@ -19,7 +19,7 @@ var firestore = require('./firestoreDB/firestore.ts');
 // firestore.setDocumentValue('users','Kristian', {});
 // firestore.deleteDocument('users','Kristian'); 
 // firestore.updateDocumentValue('users/users2/users3','users4', {name: 'Kristian'});
-import { getUsers } from './firestoreDB/users/userDB';
+// import { getUsers } from './firestoreDB/users/userDB';
 //API
 app.get('/',(req,res) => {
   console.log('request:/');
@@ -47,9 +47,9 @@ app.get('/ts',(req,res) => {
   res.send('typescript');
 });
 
-app.get('/users',async (req,res) => {
-  res.send(await getUsers())
-});
+// app.get('/users',async (req,res) => {
+//   res.send(await getUsers())
+// });
 
 var mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);

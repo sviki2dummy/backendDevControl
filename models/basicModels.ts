@@ -13,7 +13,7 @@ export interface IDeviceFieldAccess {
 
 export interface IDevice{
     id: number,
-    deviceKey: number,
+    deviceKey: string,
     deviceName: string,
     deviceFieldGroups: IFieldGroup[],
     userAdminId: number,

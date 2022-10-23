@@ -1,54 +1,65 @@
 import { IUser } from '../../models/basicModels';
-import { getCollectionData, getDocumentData, setDocumentValue, updateDocumentValue } from '../firestore';
-import { getMaxUserID, setMaxUserId } from '../IDhandlingValues/IDhandlingValues';
+import { firestore } from '../firestore';
+import { getMaxUserID } from '../IDhandlingValues/IDhandlingValues';
 
-export async function getUsers(): Promise<IUser[]> {
-    return await getCollectionData('users');
-}
+export class usersDB extends firestore {
 
-export async function getUserbyId(id: number): Promise<IUser> {
-    return await getDocumentData('users', `${id}`);
-}
+    static usersCollName = 'users';
 
-export async function getUserbyCreds(username: string, password: string): Promise<IUser> {
-    var users = await getUsers();
-    var user = users.find(user => user.username === username && user.password === password);
-    return user;
-}
-
-export async function addUser(username: string, password: string, email: string): Promise<number> {
-    var users = await getUsers();
-    var sameNameUser = users.find(user => user.username === username);
-    if (sameNameUser) return -1;
-    var maxIDdoc = await getMaxUserID();
-    var newUser: IUser = {
-        id: maxIDdoc + 1,
-        password: password,
-        username: username,
-        email: email,
-        deviceFields: [],
+    async getUsers(): Promise<IUser[]> {
+        return await this.getCollectionData(usersDB.usersCollName);
     }
-    await setMaxUserId(newUser.id);
-    await setDocumentValue('users', `${newUser.id}`, newUser);
-    return newUser.id;
-}
 
-export async function changeUserPassword(id: number, oldP: string, newP: string) {
-    let user = await getUserbyId(id);
-    if (!user) {
-        throw ({ message: 'User doesn\'t exist in database' });
+    async getUserbyId(id: number): Promise<IUser> {
+        return await this.getDocumentData(usersDB.usersCollName, `${id}`);
     }
-    if (user.password !== oldP) {
-        throw ({ message: 'Wrong password' });
-    }
-    await updateDocumentValue('users', `${id}`, { password: newP });
-}
 
-export async function changeUsername(id: number, username: string) {
-    let user = await getUserbyId(id);
-    if (!user) {
-        throw ({ message: 'User doesn\'t exist in database' });
+    async getUserbyCreds(username: string, password: string): Promise<IUser> {
+        var users = await this.getUsers();
+        return users.find(user => user.username === username && user.password === password);
     }
-    await updateDocumentValue('users', `${id}`, { username: username });
-}
 
+    async addUser(username: string, password: string, email: string): Promise<number> {
+        var users = await this.getUsers();
+        var sameNameUser = users.find(user => user.username === username);
+        if (sameNameUser) return -1;
+        var maxIDdoc = await getMaxUserID(true);
+        var newUser: IUser = {
+            id: maxIDdoc + 1,
+            password: password,
+            username: username,
+            email: email,
+            deviceFields: [],
+        }
+        await this.setDocumentValue(usersDB.usersCollName, `${newUser.id}`, newUser);
+        return newUser.id;
+    }
+
+    async changeUserPassword(id: number, oldP: string, newP: string) {
+        let user = await this.getUserbyId(id);
+        if (!user) {
+            throw ({ message: 'User doesn\'t exist in database' });
+        }
+        if (user.password !== oldP) {
+            throw ({ message: 'Wrong password' });
+        }
+        await this.updateDocumentValue(usersDB.usersCollName, `${id}`, { password: newP });
+    }
+
+    async changeUsername(id: number, username: string) {
+        let user = await this.getUserbyId(id);
+        if (!user) {
+            throw ({ message: 'User doesn\'t exist in database' });
+        }
+        user.username = username;
+        await this.updateDocumentValue(usersDB.usersCollName, `${id}`, user);
+    }
+
+    async deleteUser(id: number) {
+        let user = await this.getUserbyId(id);
+        if (!user) {
+            throw ({ message: 'User doesn\'t exist in database' });
+        }
+        await this.deleteDocument(usersDB.usersCollName, `${id}`);
+    }
+}
