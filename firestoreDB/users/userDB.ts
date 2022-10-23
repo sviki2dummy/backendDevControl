@@ -30,6 +30,7 @@ export class usersDB extends firestore {
             username: username,
             email: email,
             deviceFields: [],
+            fieldViews: [],
         }
         await this.setDocumentValue(usersDB.usersCollName, `${newUser.id}`, newUser);
         return newUser.id;

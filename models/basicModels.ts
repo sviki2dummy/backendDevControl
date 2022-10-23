@@ -4,6 +4,13 @@ export interface IUser{
     email: string,
     password: string,
     deviceFields: IDeviceField[],
+    fieldViews: IUserView[],
+}
+
+export interface IUserView {
+    deviceFields: IDeviceField[],
+    color: string,
+    viewName: string,
 }
 
 export interface IDeviceFieldAccess {
