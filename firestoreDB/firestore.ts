@@ -13,25 +13,25 @@ admin.initializeApp({
 })
 let db = admin.firestore();
 
-async function setDocumentValue(collectionPath: string, documentName: string, value) {
+export async function setDocumentValue(collectionPath: string, documentName: string, value) {
   return await db.collection(collectionPath).doc(documentName).set(value);
 }
 
-async function updateDocumentValue(collectionPath: string, documentName: string, value) {
+export async function updateDocumentValue(collectionPath: string, documentName: string, value) {
   return await db.collection(collectionPath).doc(documentName).update(value);
 }
 
-async function deleteDocument(collectionPath: string, documentName: string) {
+export async function deleteDocument(collectionPath: string, documentName: string) {
   return await db.collection(collectionPath).doc(documentName).delete();
 }
 
-async function getDocumentData(collectionPath: string, documentName: string): Promise<any> {
+export async function getDocumentData(collectionPath: string, documentName: string): Promise<any> {
   let doc = db.collection(collectionPath).doc(documentName);
   let data = (await doc.get()).data();
   return data;
 }
 
-async function getCollectionData(collectionPath: string): Promise<any[]> {
+export async function getCollectionData(collectionPath: string): Promise<any[]> {
   let collection = await db.collection(collectionPath).get();
   let data = [];
   collection.forEach(doc => {
@@ -40,18 +40,18 @@ async function getCollectionData(collectionPath: string): Promise<any[]> {
   return data;
 }
 
-function getColletionRef(collectionPath: string) {
+export function getColletionRef(collectionPath: string) {
   return db.collection(collectionPath);
 }
 
-function getDocumentRef(collectionPath: string, documentName: string) {
+export function getDocumentRef(collectionPath: string, documentName: string) {
   return db.collection(collectionPath).doc(documentName);
 }
 
-module.exports.setDocumentValue = setDocumentValue;
-module.exports.updateDocumentValue = updateDocumentValue;
-module.exports.deleteDocument = deleteDocument;
-module.exports.getColletionRef = getColletionRef;
-module.exports.getDocumentRef = getDocumentRef;
-module.exports.getDocumentData = getDocumentData;
-module.exports.getCollectionData = getCollectionData;
+// module.exports.setDocumentValue = setDocumentValue;
+// module.exports.updateDocumentValue = updateDocumentValue;
+// module.exports.deleteDocument = deleteDocument;
+// module.exports.getColletionRef = getColletionRef;
+// module.exports.getDocumentRef = getDocumentRef;
+// module.exports.getDocumentData = getDocumentData;
+// module.exports.getCollectionData = getCollectionData;

@@ -1,65 +1,54 @@
 import { IUser } from '../../models/basicModels';
-import { CollectionReference } from "firebase/firestore/lite";
+import { getCollectionData, getDocumentData, setDocumentValue, updateDocumentValue } from '../firestore';
+import { getMaxUserID, setMaxUserId } from '../IDhandlingValues/IDhandlingValues';
 
-
-var firestore = require('../firestore');
-
-const allUsersRef = firestore.getColletionRef('users');
-
-
-async function getUsers(): Promise<IUser[]> {
-    var allUsersRef = firestore.getColletionRef('users');
-    var usersDocs = await allUsersRef.get();
-    let users = [];
-    // let modelUser: IUser = {} as IUser;
-    // modelUser.deviceFields = [];
-    // modelUser.email = "";
-    // modelUser.id = 0;
-    // modelUser.password = "";
-    // modelUser.username = "";
-
-    usersDocs.forEach(user => {
-        // var cleanUser: IUser = {} as IUser;
-        user = user.data();
-        // console.log(user);
-        // Object.keys(modelUser).forEach(property => {
-        // console.log(property);
-        // cleanUser[property] = user[property];
-        // });
-        // console.log(cleanUser);
-        // users.push(cleanUser);
-        users.push(user);
-    });
-    // console.log(users);
-
-    return users;
+export async function getUsers(): Promise<IUser[]> {
+    return await getCollectionData('users');
 }
 
-async function getUserbyCreds(username: string, password: string): Promise<number> {
+export async function getUserbyId(id: number): Promise<IUser> {
+    return await getDocumentData('users', `${id}`);
+}
+
+export async function getUserbyCreds(username: string, password: string): Promise<IUser> {
     var users = await getUsers();
-    var user = users.find(user => user.username === username && user.password === password); 
-    return user?.id || -1;
+    var user = users.find(user => user.username === username && user.password === password);
+    return user;
 }
 
-async function addUser(username: string, password: string, email: string): Promise<number> {
+export async function addUser(username: string, password: string, email: string): Promise<number> {
     var users = await getUsers();
     var sameNameUser = users.find(user => user.username === username);
-    if (sameNameUser) {
-        return -1;
+    if (sameNameUser) return -1;
+    var maxIDdoc = await getMaxUserID();
+    var newUser: IUser = {
+        id: maxIDdoc + 1,
+        password: password,
+        username: username,
+        email: email,
+        deviceFields: [],
     }
-    var maxIDdoc = firestore.getDocumentRef('IDhandlingValues', 'maxUserId');
-    maxIDdoc = (await maxIDdoc.get()).data().maxUserId;
-    var newUser: IUser = {} as IUser
-    newUser.id = maxIDdoc + 1;
-    newUser.password = password
-    newUser.username = username;
-    newUser.email = '';
-    firestore.setDocumentValue('IDhandlingValues', 'maxUserId', { maxUserId: newUser.id });
-    firestore.setDocumentValue('users', `${newUser.id}`, newUser);
+    await setMaxUserId(newUser.id);
+    await setDocumentValue('users', `${newUser.id}`, newUser);
     return newUser.id;
 }
 
+export async function changeUserPassword(id: number, oldP: string, newP: string) {
+    let user = await getUserbyId(id);
+    if (!user) {
+        throw ({ message: 'User doesn\'t exist in database' });
+    }
+    if (user.password !== oldP) {
+        throw ({ message: 'Wrong password' });
+    }
+    await updateDocumentValue('users', `${id}`, { password: newP });
+}
 
-module.exports.getAllUsers = getUsers;
-module.exports.addUser = addUser;
-module.exports.getUserbyCreds = getUserbyCreds;
+export async function changeUsername(id: number, username: string) {
+    let user = await getUserbyId(id);
+    if (!user) {
+        throw ({ message: 'User doesn\'t exist in database' });
+    }
+    await updateDocumentValue('users', `${id}`, { username: username });
+}
+
