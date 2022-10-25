@@ -1,19 +1,20 @@
 var express = require('express');
 var router = express.Router();
 
+import { usersDB } from '../../../firestoreDB/users/userDB';
 import { IRegisterRequest } from '../../../models/API/loginRegisterReqRes'
-var userDB = require('../../../firestoreDB/users/userDB');
+var userDB: usersDB = require('../../../firestoreDB/users/userDB');
 
 router.post('/', async (req, res) => {
     console.log(req.body);
     let registerReq: IRegisterRequest = req.body;
-    console.log('registerrr')
-    let id = await userDB.addUser(registerReq.username, registerReq.password, registerReq.email);
-    if(id === -1){
-        res.send('User not created');
+    let id;
+    try {
+        id = await userDB.addUser(registerReq.username, registerReq.password, registerReq.email);
+        res.send(`${id}`);
     }
-    else{
-        res.send('User created: ' + id);
+    catch (e) {
+        res.send(e['message']);
     }
 })
 

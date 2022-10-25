@@ -1,20 +1,35 @@
-interface IAddDevice {
+import { IDeviceField } from "../basicModels";
+
+export interface IAddDevice {
     deviceName: string
     deviceKey?: string,
     userAdminId: number,
 }
 
 
-interface IRemoveDevice {
+export interface IRemoveDevice {
     deviceId: number,    
 }
 
-interface IAddDeviceField {
+export interface IAddDeviceFieldGroup{
     deviceId: number,
+    groupName: string,
+}
+
+export interface IAddDeviceField {
+    deviceId: number,
+    groupId: number,
     deviceField: IDeviceField,
 }
 
-interface IRemoveDeviceField {
+export interface IRemoveDeviceField {
     deviceId: number,
+    groupId: number,
     fieldId: number,
 }
+
+export interface IRemoveDeviceFieldGroup {
+    deviceId: number,
+    groupId: number,
+}
+

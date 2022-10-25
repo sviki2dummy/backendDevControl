@@ -1,8 +1,19 @@
+var firebaseObj: firestore;
+
+export function createFirebaseInstance() {
+  firebaseObj = new firestore();
+}
+
+export function getFirebaseInstance(): firestore{
+  return firebaseObj;
+}
+
 export class firestore {
 
-  db: any;
+  private db: any;
 
   constructor() {
+    console.log('firestore constructor');
     var admin = require('firebase-admin');
     var serviceAccount;
     try {

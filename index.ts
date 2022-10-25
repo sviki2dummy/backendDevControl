@@ -1,55 +1,37 @@
+import { firestore } from "./firestoreDB/firestore";
+
 var express = require('express');
 var webSocketServer = require('websocket').server;
 var http = require('http');
-
 let port = process.env.PORT || 8000;
-
 let app = express();
-
 let server = http.createServer(app);
 
 let wsServer = new webSocketServer({
   httpServer: server,
 });
 
+var firestoreFile = require('./firestoreDB/firestore.ts');
+firestoreFile.createFirebaseInstance();
+var deviceDBfile = require('./firestoreDB/devices/deviceDB.ts');
+deviceDBfile.createDeviceDBInstance();
+var usersDBfile = require('./firestoreDB/users/userDB.ts');
+usersDBfile.createUserDBInstance();
 
-var firestore = require('./firestoreDB/firestore.ts');
-// firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
-// firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
-// firestore.setDocumentValue('users','Kristian', {});
-// firestore.deleteDocument('users','Kristian'); 
-// firestore.updateDocumentValue('users/users2/users3','users4', {name: 'Kristian'});
-// import { getUsers } from './firestoreDB/users/userDB';
-//API
+let firestoreDB: firestore = firestoreFile.getFirebaseInstance();
+
 app.get('/',(req,res) => {
   console.log('request:/');
   res.send('hello world!!!');
 });
 
-app.get('/x',(req,res) => {
-  console.log('request:/x');
-  res.send('xReq');
-});
-
-app.get('/combo',(req,res) => {
-  console.log('request:/combo');
-  res.send('combo');
-});
-
 app.get('/update',(req,res) => {
   console.log('request:/update');
-  firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
+  firestoreDB.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date(), obj: {
+    obj:{obj: {obj: 3}}
+  }});
   res.send('update');
 });
-
-app.get('/ts',(req,res) => {
-  console.log('request:/ts');
-  res.send('typescript');
-});
-
-// app.get('/users',async (req,res) => {
-//   res.send(await getUsers())
-// });
 
 var mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);

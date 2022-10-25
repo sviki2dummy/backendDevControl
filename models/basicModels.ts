@@ -27,28 +27,26 @@ export interface IDevice{
 }
 
 export interface IFieldGroup{
+    id: number,
     fields: IDeviceField[],
     groupName: string,
 }
 
 export interface IDeviceField{
-    fieldType: 'numeric' | 'text',
-    field: IDeviceNumericField | IDeviceTextField,
-}
-
-interface IDeviceNumericField{
+    deviceId: number,
     id: number,
     fieldName: string,
+
+    IO_Direction: 'input' | 'output',
+    fieldType: 'numeric' | 'text' | 'button',
+    fieldValuePrefix: string,
+    fieldValueSufix: string, //deg Celsius
+
     fieldValue: number,
     fieldControlType: 'slider' | 'upDownButtons',
     minValue: number,
     maxValue: number,
     valueStep: number,
-    IO_Direction: 'input' | 'output', 
-}
 
-interface IDeviceTextField {
-    id: number,
-    fieldName: string,
-    fieldText: string,
+    textValue: string,
 }

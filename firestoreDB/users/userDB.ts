@@ -1,29 +1,45 @@
 import { IUser } from '../../models/basicModels';
-import { firestore } from '../firestore';
-import { getMaxUserID } from '../IDhandlingValues/IDhandlingValues';
+import { getMaxIds, getMaxIDsInstance } from '../MaxIDs/MaxIDs';
+import { firestore, getFirebaseInstance } from '../firestore';
 
-export class usersDB extends firestore {
+var userDBObj: usersDB;
+
+export function createUserDBInstance() {
+    userDBObj = new usersDB();
+}
+
+export function getUserDBInstance(): usersDB {
+    return userDBObj;
+}
+export class usersDB {
 
     static usersCollName = 'users';
+    firestore: firestore;
+    getMaxIds: getMaxIds;
+    constructor() {
+        this.firestore = getFirebaseInstance();
+        this.getMaxIds = getMaxIDsInstance();
+    }
 
     async getUsers(): Promise<IUser[]> {
-        return await this.getCollectionData(usersDB.usersCollName);
+        return await this.firestore.getCollectionData(usersDB.usersCollName);
     }
 
     async getUserbyId(id: number): Promise<IUser> {
-        return await this.getDocumentData(usersDB.usersCollName, `${id}`);
+        return await this.firestore.getDocumentData(usersDB.usersCollName, `${id}`);
     }
 
     async getUserbyCreds(username: string, password: string): Promise<IUser> {
         var users = await this.getUsers();
-        return users.find(user => user.username === username && user.password === password);
+        const user = users.find(user => user.username === username && user.password === password);
+        return user;
     }
 
     async addUser(username: string, password: string, email: string): Promise<number> {
         var users = await this.getUsers();
         var sameNameUser = users.find(user => user.username === username);
-        if (sameNameUser) return -1;
-        var maxIDdoc = await getMaxUserID(true);
+        if (sameNameUser) throw ({ message: 'User with same name exists' });
+        var maxIDdoc = await this.getMaxIds.getMaxUserId(true);
         var newUser: IUser = {
             id: maxIDdoc + 1,
             password: password,
@@ -32,7 +48,7 @@ export class usersDB extends firestore {
             deviceFields: [],
             fieldViews: [],
         }
-        await this.setDocumentValue(usersDB.usersCollName, `${newUser.id}`, newUser);
+        await this.firestore.setDocumentValue(usersDB.usersCollName, `${newUser.id}`, newUser);
         return newUser.id;
     }
 
@@ -44,7 +60,7 @@ export class usersDB extends firestore {
         if (user.password !== oldP) {
             throw ({ message: 'Wrong password' });
         }
-        await this.updateDocumentValue(usersDB.usersCollName, `${id}`, { password: newP });
+        await this.firestore.updateDocumentValue(usersDB.usersCollName, `${id}`, { password: newP });
     }
 
     async changeUsername(id: number, username: string) {
@@ -53,7 +69,7 @@ export class usersDB extends firestore {
             throw ({ message: 'User doesn\'t exist in database' });
         }
         user.username = username;
-        await this.updateDocumentValue(usersDB.usersCollName, `${id}`, user);
+        await this.firestore.updateDocumentValue(usersDB.usersCollName, `${id}`, user);
     }
 
     async deleteUser(id: number) {
@@ -61,6 +77,6 @@ export class usersDB extends firestore {
         if (!user) {
             throw ({ message: 'User doesn\'t exist in database' });
         }
-        await this.deleteDocument(usersDB.usersCollName, `${id}`);
+        await this.firestore.deleteDocument(usersDB.usersCollName, `${id}`);
     }
 }
