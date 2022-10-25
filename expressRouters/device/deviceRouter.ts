@@ -10,14 +10,14 @@ router.use('/addDeviceFieldGroup', addDeviceFieldGroup);
 var addDeviceField = require('./subrouter/addDeviceField.ts');
 router.use('/addDeviceField', addDeviceField);
 
-var deleteDevice = require('./subrouter/deleteDevice');
+var deleteDevice = require('./subrouter/deleteDevice.ts');
 router.use('/deleteDevice', deleteDevice);
 
 
-var deleteDeviceFieldGroup = require('./subrouter/deleteDeviceFieldGroup');
+var deleteDeviceFieldGroup = require('./subrouter/deleteDeviceFieldGroup.ts');
 router.use('/deleteDeviceFieldGroup', deleteDeviceFieldGroup);
 
-var deleteDeviceField = require('./subrouter/deleteDeviceField');
+var deleteDeviceField = require('./subrouter/deleteDeviceField.ts');
 router.use('/deleteDeviceField', deleteDeviceField);
 
 module.exports = router;

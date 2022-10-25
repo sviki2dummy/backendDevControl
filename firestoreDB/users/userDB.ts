@@ -37,6 +37,8 @@ export class usersDB {
 
     async addUser(username: string, password: string, email: string): Promise<number> {
         var users = await this.getUsers();
+        console.log('dovdje1');
+
         var sameNameUser = users.find(user => user.username === username);
         if (sameNameUser) throw ({ message: 'User with same name exists' });
         var maxIDdoc = await this.getMaxIds.getMaxUserId(true);
@@ -48,6 +50,8 @@ export class usersDB {
             deviceFields: [],
             fieldViews: [],
         }
+        console.log('dovdje');
+        
         await this.firestore.setDocumentValue(usersDB.usersCollName, `${newUser.id}`, newUser);
         return newUser.id;
     }

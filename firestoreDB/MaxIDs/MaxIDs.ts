@@ -3,6 +3,7 @@ import { firestore, getFirebaseInstance } from '../firestore';
 var maxIDsObj: getMaxIds;
 
 export function createMaxIDsInstance() {
+    console.log('create max id')
     maxIDsObj = new getMaxIds();
 }
 
@@ -12,17 +13,21 @@ export function getMaxIDsInstance(): getMaxIds {
 
 export class getMaxIds {
 
-    private userKey: 'user';
-    private deviceKey: 'device';
-    private fieldGroupKey: 'fieldGroup';
-    private fieldKey: 'field';
+    private maxIDsCollName = 'maxIDs';
+
+    private userKey = 'user';
+    private deviceKey = 'device';
+    private fieldGroupKey = 'fieldGroup';
+    private fieldKey = 'field';
 
     firestore: firestore;
     constructor() {
         this.firestore = getFirebaseInstance();
     }
 
-    async getMaxUserId(autoIncrement: boolean): Promise<number> { return await this.getMax(this.userKey, autoIncrement) }
+    async getMaxUserId(autoIncrement: boolean): Promise<number> {
+        return await this.getMax(this.userKey, autoIncrement)
+    }
     async setMaxUserId(id: number) { await this.setMax(this.userKey, id) }
 
     async getMaxDeviceId(autoIncrement: boolean): Promise<number> { return await this.getMax(this.deviceKey, autoIncrement) }
@@ -36,7 +41,9 @@ export class getMaxIds {
 
 
     private async getMax(key: string, autoIncrement?: boolean): Promise<number> {
-        const maxId = (await this.firestore.getDocumentData('maxIds', key)).max || 0;
+        console.log('key ' + key);
+
+        const maxId = (await this.firestore.getDocumentData(this.maxIDsCollName, key)).max || 0;
         if (autoIncrement) {
             await this.setMax(key, maxId + 1);
         }
@@ -44,6 +51,8 @@ export class getMaxIds {
     }
 
     private async setMax(key: string, id: number) {
-        return await this.firestore.setDocumentValue('maxIds', key, { max: id });
+        console.log('key ' + key);
+
+        return await this.firestore.setDocumentValue(this.maxIDsCollName, key, { max: id });
     }
 }

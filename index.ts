@@ -13,10 +13,13 @@ let wsServer = new webSocketServer({
 
 var firestoreFile = require('./firestoreDB/firestore.ts');
 firestoreFile.createFirebaseInstance();
+var maxIDsfile = require('./firestoreDB/MaxIDs/MaxIDs');
+maxIDsfile.createMaxIDsInstance();
 var deviceDBfile = require('./firestoreDB/devices/deviceDB.ts');
 deviceDBfile.createDeviceDBInstance();
 var usersDBfile = require('./firestoreDB/users/userDB.ts');
 usersDBfile.createUserDBInstance();
+
 
 let firestoreDB: firestore = firestoreFile.getFirebaseInstance();
 
