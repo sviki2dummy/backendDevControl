@@ -41,6 +41,7 @@ router.post('/', async (req, res) => {
         res.send(e.message)
         return;
     }
+    
 
     if (device.userAdminId != user.id) {
         res.status(400);

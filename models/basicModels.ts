@@ -38,6 +38,18 @@ export interface IFieldGroup{
     groupName: string,
 }
 
+export interface IComplexFieldGroup {
+    id: number,
+    groupName: string,
+    fieldGroupStates: IComplexFieldGroupState[],
+}
+
+export interface IComplexFieldGroupState{
+    stateId: number,
+    steteName: string,
+    fields: IDeviceField[],
+}
+
 export interface IDeviceField{
     deviceId: number,
     id: number,

@@ -78,7 +78,6 @@ export class DeviceDB {
         });
     }
 
-
     getDeviceFieldGroup(device: IDevice, groupId: number): IFieldGroup {
         let devGroup = device.deviceFieldGroups[groupId]
         if (!devGroup) {
