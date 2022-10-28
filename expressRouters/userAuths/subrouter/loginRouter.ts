@@ -1,15 +1,40 @@
+import { UsersDB } from '../../../firestoreDB/users/userDB';
+import { ILoginByTokenRequest, ILoginRequest, ILoginResponse } from '../../../models/API/loginRegisterReqRes'
+
 var express = require('express');
 var router = express.Router();
-import { usersDB } from '../../../firestoreDB/users/userDB';
-import { ILoginRequest } from '../../../models/API/loginRegisterReqRes'
+
 var userDBfile = require('../../../firestoreDB/users/userDB');
-var userDB: usersDB = userDBfile.getUserDBInstance();
+var userDB: UsersDB = userDBfile.getUserDBInstance();
 
-
-router.post('/', async (req, res) => {
+router.post('/creds', async (req, res) => {
     const loginReq: ILoginRequest = req.body;
-    let id = (await userDB.getUserbyCreds(loginReq.username, loginReq.password)).id;
-    res.send(`${id}`);
+
+    let loginResponse: ILoginResponse;
+    try {
+        loginResponse = await userDB.loginUserByCreds(loginReq.username, loginReq.password);
+    } catch (e) {
+        res.status(400);
+        res.send(e.message);
+        return;
+    }
+    res.json(loginResponse);
+});
+
+router.post('/token', async (req, res) => {
+    const loginReq: ILoginByTokenRequest = req.body;
+
+    let loginResponse = {} as ILoginResponse;
+    try {
+        const user = await userDB.getUserByToken(loginReq.authToken, true);
+        loginResponse.user = user;
+        loginResponse.authToken = loginReq.authToken;
+    } catch (e) {
+        res.status(400);
+        res.send(e.message);
+        return;
+    }
+    res.json(loginResponse);
 });
 
 module.exports = router;

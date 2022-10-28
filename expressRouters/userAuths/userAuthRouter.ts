@@ -10,4 +10,7 @@ router.use('/register', registerUserAuthRouter);
 var logoutUserAuthRouter = require('./subrouter/logoutRouter.ts');
 router.use('/logout', logoutUserAuthRouter);
 
+var deleteUserAuthRouter = require('./subrouter/deleteUserRouter');
+router.use('/delete', deleteUserAuthRouter);
+
 module.exports = router;

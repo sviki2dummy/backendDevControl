@@ -1,11 +1,11 @@
+import { UsersDB } from '../../../firestoreDB/users/userDB';
+import { IRegisterRequest } from '../../../models/API/loginRegisterReqRes'
+
 var express = require('express');
 var router = express.Router();
 
-import { usersDB } from '../../../firestoreDB/users/userDB';
-import { IRegisterRequest } from '../../../models/API/loginRegisterReqRes'
-
 var usersDBfile = require('../../../firestoreDB/users/userDB.ts')
-var userDB: usersDB = usersDBfile.getUserDBInstance();
+var userDB: UsersDB = usersDBfile.getUserDBInstance();
 
 router.post('/', async (req, res) => {
     console.log(req.body);
@@ -13,11 +13,11 @@ router.post('/', async (req, res) => {
     let id;
     try {
         id = await userDB.addUser(registerReq.username, registerReq.password, registerReq.email);
-        res.send(`${id}`);
+        let loginResponse = (await userDB.loginUserByCreds(registerReq.username, registerReq.password));
+        res.json(loginResponse);
     }
     catch (e) {
         console.log(e);
-        
         res.send(e['message']);
     }
 })

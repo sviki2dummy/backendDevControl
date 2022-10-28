@@ -25,9 +25,7 @@ export class getMaxIds {
         this.firestore = getFirebaseInstance();
     }
 
-    async getMaxUserId(autoIncrement: boolean): Promise<number> {
-        return await this.getMax(this.userKey, autoIncrement)
-    }
+    async getMaxUserId(autoIncrement: boolean): Promise<number> {return await this.getMax(this.userKey, autoIncrement)}
     async setMaxUserId(id: number) { await this.setMax(this.userKey, id) }
 
     async getMaxDeviceId(autoIncrement: boolean): Promise<number> { return await this.getMax(this.deviceKey, autoIncrement) }
@@ -41,9 +39,13 @@ export class getMaxIds {
 
 
     private async getMax(key: string, autoIncrement?: boolean): Promise<number> {
-        console.log('key ' + key);
-
-        const maxId = (await this.firestore.getDocumentData(this.maxIDsCollName, key)).max || 0;
+        let maxId: number;
+        try{
+            maxId = (await this.firestore.getDocumentData(this.maxIDsCollName, key)).max
+        }
+        catch{
+            maxId = 0;
+        }
         if (autoIncrement) {
             await this.setMax(key, maxId + 1);
         }
@@ -51,8 +53,6 @@ export class getMaxIds {
     }
 
     private async setMax(key: string, id: number) {
-        console.log('key ' + key);
-
         return await this.firestore.setDocumentValue(this.maxIDsCollName, key, { max: id });
     }
 }

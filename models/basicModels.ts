@@ -7,6 +7,12 @@ export interface IUser{
     fieldViews: IUserView[],
 }
 
+export interface IAuthToken {
+    authToken: string,
+    userId: number,
+    validUntil: string,
+}
+
 export interface IUserView {
     deviceFields: IDeviceField[],
     color: string,

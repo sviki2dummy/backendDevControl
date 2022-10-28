@@ -20,7 +20,6 @@ deviceDBfile.createDeviceDBInstance();
 var usersDBfile = require('./firestoreDB/users/userDB.ts');
 usersDBfile.createUserDBInstance();
 
-
 let firestoreDB: firestore = firestoreFile.getFirebaseInstance();
 
 app.get('/',(req,res) => {
@@ -35,6 +34,11 @@ app.get('/update',(req,res) => {
   }});
   res.send('update');
 });
+
+app.get('/error', (req,res) => {
+  res.status(400);
+  res.send({a: "hello"});
+})
 
 var mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);

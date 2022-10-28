@@ -1,10 +1,17 @@
+import { IUser } from "../basicModels";
+
 export interface ILoginRequest {
     username: string,
     password: string,
 }
 
+export interface ILoginByTokenRequest {
+    authToken: string,
+}
+
 export interface ILoginResponse {
-    userId: number,
+    authToken: string,
+    user: IUser,
 }
 
 export interface IRegisterRequest {
@@ -13,13 +20,10 @@ export interface IRegisterRequest {
     password: string,
 }
 
-export interface IRegistrationPendingRequests {
-    uuid: string,
-    username: string,
-    email: string,
-    password: string,
+export interface ILogoutRequest {
+    authToken: string,
 }
 
-export interface ILogoutRequest {
-    username: string,
+export interface IDeleteUserRequest {
+    authToken: string,
 }

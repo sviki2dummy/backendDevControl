@@ -26,7 +26,7 @@ export class DeviceDB {
     }
 
     async getDevices(): Promise<IDevice[]> {
-        return await this.firestore.getCollectionData(DeviceDB.devCollName) || [];
+        return await this.firestore.getCollectionData(DeviceDB.devCollName);
     }
 
     async getDevicebyId(id: number): Promise<IDevice> {
@@ -44,7 +44,6 @@ export class DeviceDB {
             deviceKey = uuid().replace('-', '');//.slice(0, 10);
             if (!allDevices.find(o => o.deviceKey === deviceKey)) break;
         }
-
         const maxId = await this.getMaxIds.getMaxDeviceId(true);
         const newDevice: IDevice = {
             id: maxId + 1,
@@ -53,7 +52,7 @@ export class DeviceDB {
             deviceKey: deviceKey,
             deviceFieldGroups: []
         }
-        await this.firestore.setDocumentValue(DeviceDB.usersCollName, `${newDevice.id}`, newDevice);
+        await this.firestore.setDocumentValue(DeviceDB.devCollName, `${newDevice.id}`, newDevice);
         return newDevice.id;
     }
 
@@ -68,6 +67,17 @@ export class DeviceDB {
         let device = await this.getDevicebyId(id);
         await this.firestore.deleteDocument(DeviceDB.devCollName, `${id}`); //TODO treba pocistit taj device u deviceFieldovima od svih usera
     }
+
+    async changeDeviceAdmin(deviceId: number, userId: number) {
+        let device: IDevice = await this.getDevicebyId(deviceId);
+        if (device.userAdminId === userId) {
+            throw({message: 'User is already the admin'});
+        } 
+        await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
+            userAdminId: userId,
+        });
+    }
+
 
     getDeviceFieldGroup(device: IDevice, groupId: number): IFieldGroup {
         let devGroup = device.deviceFieldGroups[groupId]

@@ -1,10 +1,9 @@
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
-import { IRemoveDevice, IRemoveDeviceFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
 
 var express = require('express');
 var router = express.Router();
 
-var deviceDBfile = require('./firestoreDB/devices/deviceDB');
+var deviceDBfile = require('../../../firestoreDB/devices/deviceDB.ts');
 var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
 
 router.post('/', async (req, res) => {
