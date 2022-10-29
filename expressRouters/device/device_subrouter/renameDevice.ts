@@ -1,6 +1,6 @@
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
-import { IRenameDevice } from "../../../models/API/deviceCreateAlterReqRes";
+import { IRenameDeviceReq } from "../../../models/API/deviceCreateAlterReqRes";
 import { IDevice, IUser } from "../../../models/basicModels";
 
 var express = require('express');
@@ -13,7 +13,7 @@ var userDBfile = require('../../../firestoreDB/users/userDB.ts');
 var userDb: UsersDB = userDBfile.getUserDBInstance();
 
 router.post('/', async (req, res) => {
-    var renameDeviceReq: IRenameDevice = req.body;
+    var renameDeviceReq: IRenameDeviceReq = req.body;
     let user: IUser;
     try {
         user = await userDb.getUserByToken(renameDeviceReq.authToken, true);

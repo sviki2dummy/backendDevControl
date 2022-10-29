@@ -1,8 +1,6 @@
-import { rename } from "fs";
-import { createJsxClosingElement } from "typescript";
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
-import { IRenameDeviceFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
+import { IRenameFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
 import { IDevice, IUser } from "../../../models/basicModels";
 
 var express = require('express');
@@ -16,7 +14,7 @@ var userDb: UsersDB = userDBfile.getUserDBInstance();
 
 
 router.post('/', async (req, res) => {
-    var renameDeviceGroupFieldReq: IRenameDeviceFieldGroup = req.body;
+    var renameDeviceGroupFieldReq: IRenameFieldGroup = req.body;
 
     let user: IUser;
     try {

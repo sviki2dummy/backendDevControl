@@ -15,25 +15,22 @@ router.use('/deleteDevice', deleteDevice);
 
 
 
-var addDeviceFieldGroup = require('./deviceFieldGroups_subrouter/addDeviceFieldGroup.ts');
-router.use('/addDeviceFieldGroup', addDeviceFieldGroup);
+var addFieldGroup = require('./deviceFieldGroups_subrouter/addDeviceFieldGroup.ts');
+router.use('/addFieldGroup', addFieldGroup);
 
-var renameDeviceFieldGroup = require('./deviceFieldGroups_subrouter/renameDeviceFieldGroup.ts');
-router.use('/renameDeviceFieldGroup', renameDeviceFieldGroup);
+var renameFieldGroup = require('./deviceFieldGroups_subrouter/renameDeviceFieldGroup.ts');
+router.use('/renameFieldGroup', renameFieldGroup);
 
-var deleteDeviceFieldGroup = require('./deviceFieldGroups_subrouter/deleteDeviceFieldGroup.ts');
-router.use('/deleteDeviceFieldGroup', deleteDeviceFieldGroup);
-
-
-
-var addDeviceField = require('./deviceField_subrouter/addDeviceField.ts');
-router.use('/addDeviceField', addDeviceField);
+var deleteFieldGroup = require('./deviceFieldGroups_subrouter/deleteDeviceFieldGroup.ts');
+router.use('/deleteFieldGroup', deleteFieldGroup);
 
 
-// var deleteDeviceFieldGroup = require('./device_subrouter/deleteDeviceFieldGroup.ts');
-// router.use('/deleteDeviceFieldGroup', deleteDeviceFieldGroup);
 
-// var deleteDeviceField = require('./device_subrouter/deleteDeviceField.ts');
-// router.use('/deleteDeviceField', deleteDeviceField);
+var addField = require('./deviceField_subrouter/addDeviceField.ts');
+router.use('/addField', addField);
 
-module.exports = router;
+var renameField = require('./deviceField_subrouter/renameField');
+router.use('/renameField', renameField);
+
+var deleteField = require('./deviceField_subrouter/deleteDeviceField.ts');
+router.use('/deleteField', deleteField);

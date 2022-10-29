@@ -1,12 +1,12 @@
 import { IDeviceFieldBasic, IDeviceFieldButton, IDeviceFieldMultipleChoice, IDeviceFieldNumeric, IDeviceFieldRGB, IDeviceFieldText } from "../basicModels"
 
-export interface IAddDevice {
+export interface IAddDeviceReq {
     deviceName: string
     deviceKey?: string,
     userAdminId: number,
 }
 
-export interface IRenameDevice {
+export interface IRenameDeviceReq {
     deviceName: string,
     deviceId: number,
     authToken: string,
@@ -18,7 +18,7 @@ export interface IChangeDeviceAdminReq {
     userAdminId: number,
 }
 
-export interface IRemoveDeviceReq {
+export interface IDeleteDeviceReq {
     deviceId: number,
     authToken: string,
 }
@@ -27,20 +27,20 @@ export interface IRemoveDeviceReq {
 
 
 
-export interface IAddDeviceFieldGroup {
+export interface IAddFieldGroup {
     authToken: string,
     deviceId: number,
     groupName: string,
 }
 
-export interface IRenameDeviceFieldGroup {
+export interface IRenameFieldGroup {
     authToken: string,
     deviceId: number,
     groupId: number,
     groupName: string,
 }
 
-export interface IRemoveDeviceFieldGroup {
+export interface IDeleteFieldGroup {
     authToken: string,
     deviceId: number,
     groupId: number,
@@ -50,13 +50,12 @@ export interface IRemoveDeviceFieldGroup {
 
 
 
-export interface IAddDeviceFieldReq {
+export interface IAddFieldReq {
     authToken: string,
-    deviceField: IAddDeviceFieldBasic,
-    IO: 'input' | 'output',
+    deviceField: IAddFieldBasic,
 }
 
-export interface IAddDeviceFieldBasic {
+export interface IAddFieldBasic {
     deviceId: number,
     groupId: number,
     fieldName: string,
@@ -65,7 +64,16 @@ export interface IAddDeviceFieldBasic {
     fieldValue: IDeviceFieldNumeric | IDeviceFieldText | IDeviceFieldButton | IDeviceFieldMultipleChoice | IDeviceFieldRGB,
 }
 
-export interface IRemoveDeviceField {
+export interface IRenameFieldReq {
+    authToken: string,
+    deviceId: number,
+    groupId: number,
+    fieldId: number,
+}
+
+
+export interface IDeleteFieldReq {
+    authToken: string,
     deviceId: number,
     groupId: number,
     fieldId: number,

@@ -1,7 +1,7 @@
 import { createJsxClosingElement } from "typescript";
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
-import { IAddDeviceFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
+import { IAddFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
 import { IDevice, IUser } from "../../../models/basicModels";
 
 var express = require('express');
@@ -15,7 +15,7 @@ var userDb: UsersDB = userDBfile.getUserDBInstance();
 
 
 router.post('/', async (req, res) => {
-    var addDeviceGroupFieldReq: IAddDeviceFieldGroup = req.body;
+    var addDeviceGroupFieldReq: IAddFieldGroup = req.body;
 
     let user: IUser;
     try {

@@ -3,7 +3,7 @@ import { IDevice, IDeviceFieldBasic, IFieldGroup } from "../../models/basicModel
 import { firestore, getFirebaseInstance } from '../firestore';
 import { getMaxIds, getMaxIDsInstance } from '../MaxIDs/MaxIDs';
 import { FieldValue } from 'firebase-admin/firestore';
-import { IAddDeviceFieldBasic } from '../../models/API/deviceCreateAlterReqRes';
+import { IAddFieldBasic } from '../../models/API/deviceCreateAlterReqRes';
 
 var deviceDBObj: DeviceDB;
 
@@ -81,6 +81,10 @@ export class DeviceDB {
         });
     }
 
+
+
+
+
     getDeviceFieldGroup(device: IDevice, groupId: number): IFieldGroup {
         let devGroup = device.deviceFieldGroups[groupId]
         if (!devGroup) {
@@ -138,7 +142,7 @@ export class DeviceDB {
         return field;
     }
 
-    async addDeviceField(deviceField: IAddDeviceFieldBasic): Promise<number> {
+    async addDeviceField(deviceField: IAddFieldBasic): Promise<number> {
         let device = await this.getDevicebyId(deviceField.deviceId);
         this.getDeviceFieldGroup(device, deviceField.groupId); //baci error ako nema
 
@@ -159,15 +163,7 @@ export class DeviceDB {
         let groupField = this.getDeviceFieldGroup(device, groupId);
         this.getDeviceField(groupField, fieldId);
         await this.firestore.updateDocumentValue('devices', `${deviceId}`, {
-            deviceFieldGroups: {
-                groupId: {
-                    fields: {
-                        [fieldId]: {
-                            fieldName: fieldName,
-                        }
-                    }
-                }
-            }
+            [`deviceFieldGroups.${groupId}.fields.${fieldId}.fieldName`]: fieldName
         });
     }
 
@@ -175,14 +171,8 @@ export class DeviceDB {
         let device = await this.getDevicebyId(deviceId);
         let groupField = this.getDeviceFieldGroup(device, groupId);
         this.getDeviceField(groupField, fieldId);
-        let fieldObj = {}
-        fieldObj[fieldId] = undefined;
         await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
-            deviceFieldGroups: {
-                devGroupId: {
-                    fields: fieldObj //TODO ne valja sigurno
-                }
-            }
+            [`deviceFieldGroups.${groupId}.fields.${fieldId}`]: FieldValue.delete()
         });
     }
 

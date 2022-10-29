@@ -1,6 +1,6 @@
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
-import { IAddDevice } from "../../../models/API/deviceCreateAlterReqRes";
+import { IAddDeviceReq } from "../../../models/API/deviceCreateAlterReqRes";
 
 var express = require('express');
 var router = express.Router();
@@ -12,7 +12,7 @@ var userDBfile = require('../../../firestoreDB/users/userDB.ts');
 var userDb: UsersDB = userDBfile.getUserDBInstance();
 
 router.post('/', async (req, res) => {
-    var addDeviceReq: IAddDevice = req.body;
+    var addDeviceReq: IAddDeviceReq = req.body;
     try {
         await userDb.getUserbyId(addDeviceReq.userAdminId);
     } catch (e) {
