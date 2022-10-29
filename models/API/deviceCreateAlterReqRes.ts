@@ -69,6 +69,7 @@ export interface IRenameFieldReq {
     deviceId: number,
     groupId: number,
     fieldId: number,
+    fieldName: string,
 }
 
 

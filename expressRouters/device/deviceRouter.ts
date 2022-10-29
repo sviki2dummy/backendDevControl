@@ -29,8 +29,27 @@ router.use('/deleteFieldGroup', deleteFieldGroup);
 var addField = require('./deviceField_subrouter/addDeviceField.ts');
 router.use('/addField', addField);
 
-var renameField = require('./deviceField_subrouter/renameField');
+var renameField = require('./deviceField_subrouter/renameField.ts');
 router.use('/renameField', renameField);
 
 var deleteField = require('./deviceField_subrouter/deleteDeviceField.ts');
 router.use('/deleteField', deleteField);
+
+
+
+import { DeviceDB } from "../../firestoreDB/devices/deviceDB";
+var deviceDBfile = require('../../firestoreDB/devices/deviceDB.ts');
+var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
+router.get('/:id', async (req, res) => {
+    let id = req.params.id;
+    console.log(id);
+
+    let device = await deviceDb.getDevicebyId(id);
+    res.json(device);
+});
+
+
+
+
+
+module.exports = router;
