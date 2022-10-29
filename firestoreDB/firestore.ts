@@ -28,6 +28,7 @@ export class firestore {
       credential: admin.credential.cert(serviceAccount),
     })
     this.db = admin.firestore();
+    this.db.settings({ ignoreUndefinedProperties: true })
   }
 
   async setDocumentValue(collectionPath: string, documentName: string, value) {
@@ -63,6 +64,10 @@ export class firestore {
 
   getDocumentRef(collectionPath: string, documentName: string) {
     return this.db.collection(collectionPath).doc(documentName);
+  }
+
+  async test(){
+    await this.db.collection('devices').doc('1').update({ [`deviceFieldGroups.${"hello"}.xx`]: true })
   }
 
 }

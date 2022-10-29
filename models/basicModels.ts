@@ -1,9 +1,9 @@
-export interface IUser{
+export interface IUser {
     id: number,
     username: string,
     email: string,
     password: string,
-    deviceFields: IDeviceField[],
+    deviceFields: IDeviceFieldBasic[],
     fieldViews: IUserView[],
 }
 
@@ -14,17 +14,17 @@ export interface IAuthToken {
 }
 
 export interface IUserView {
-    deviceFields: IDeviceField[],
+    deviceFields: IDeviceFieldBasic[],
     color: string,
     viewName: string,
 }
 
 export interface IDeviceFieldAccess {
-    deviceField: IDeviceField,
+    deviceField: IDeviceFieldBasic,
     viewOnly: boolean,
 }
 
-export interface IDevice{
+export interface IDevice {
     id: number,
     deviceKey: string,
     deviceName: string,
@@ -32,9 +32,9 @@ export interface IDevice{
     userAdminId: number,
 }
 
-export interface IFieldGroup{
+export interface IFieldGroup {
     id: number,
-    fields: IDeviceField[],
+    fields: IDeviceFieldBasic[],
     groupName: string,
 }
 
@@ -44,27 +44,50 @@ export interface IComplexFieldGroup {
     fieldGroupStates: IComplexFieldGroupState[],
 }
 
-export interface IComplexFieldGroupState{
-    stateId: number,
+export interface IComplexFieldGroupState {
     steteName: string,
-    fields: IDeviceField[],
+    fields: IDeviceFieldBasic[],
 }
 
-export interface IDeviceField{
+export interface IDeviceFieldBasic {
     deviceId: number,
+    groupId: number,
     id: number,
     fieldName: string,
 
-    IO_Direction: 'input' | 'output',
-    fieldType: 'numeric' | 'text' | 'button',
-    fieldValuePrefix: string,
-    fieldValueSufix: string, //deg Celsius
+    fieldType: 'numeric' | 'text' | 'button' | 'multipleChoice' | 'RGB',
+    fieldValue: IDeviceFieldNumeric | IDeviceFieldText | IDeviceFieldButton | IDeviceFieldMultipleChoice | IDeviceFieldRGB,
+}
 
+export interface IDeviceFieldNumeric {
     fieldValue: number,
     fieldControlType: 'slider' | 'upDownButtons',
     minValue: number,
     maxValue: number,
     valueStep: number,
-
-    textValue: string,
+    IO: 'input',
 }
+
+export interface IDeviceFieldText {
+    fieldValue: string,
+    IO: 'input'
+}
+
+export interface IDeviceFieldButton {
+    fieldValue: boolean,
+    IO: 'input' | 'output',
+}
+
+export interface IDeviceFieldMultipleChoice {
+    fieldValue: number,
+    values: string[],
+    IO: 'input'
+}
+
+export interface IDeviceFieldRGB {
+    R: number,
+    G: number,
+    B: number,
+    IO: 'input'
+}
+

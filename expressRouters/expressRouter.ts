@@ -3,7 +3,9 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 
 
-router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
 var userAuthRouter = require('./userAuths/userAuthRouter.ts');
 router.use('/userAuth', userAuthRouter);
 

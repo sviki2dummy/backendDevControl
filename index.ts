@@ -29,16 +29,9 @@ app.get('/',(req,res) => {
 
 app.get('/update',(req,res) => {
   console.log('request:/update');
-  firestoreDB.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date(), obj: {
-    obj:{obj: {obj: 3}}
-  }});
+  firestoreDB.updateDocumentValue('proba','Kristian', {name: 'L1', vrijeme: new Date()});
   res.send('update');
 });
-
-app.get('/error', (req,res) => {
-  res.status(400);
-  res.send({a: "hello"});
-})
 
 var mainRouter = require('./expressRouters/expressRouter.ts');
 app.use('/API', mainRouter);

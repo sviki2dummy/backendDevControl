@@ -1,6 +1,6 @@
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
-import { IAddDevice, IAddDeviceField, IAddDeviceFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
+import { IAddDeviceFieldReq } from "../../../models/API/deviceCreateAlterReqRes";
 import { IDevice, IFieldGroup, IUser } from "../../../models/basicModels";
 
 var express = require('express');
@@ -13,7 +13,7 @@ var userDBfile = require('../../../firestoreDB/users/userDB.ts');
 var userDb: UsersDB = userDBfile.getUserDBInstance();
 
 router.post('/', async (req, res) => {
-    var addDeviceFieldReq: IAddDeviceField = req.body;
+    var addDeviceFieldReq: IAddDeviceFieldReq = req.body;
 
     let user: IUser;
     try {
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
     let device: IDevice;
     try {
-        device = await deviceDb.getDevicebyId(addDeviceFieldReq.deviceId);
+        device = await deviceDb.getDevicebyId(addDeviceFieldReq.deviceField.deviceId);
     } catch (e) {
         res.status(400);
         res.send(e.message)
@@ -35,13 +35,27 @@ router.post('/', async (req, res) => {
 
     let fieldGroup: IFieldGroup;
     try {
-        fieldGroup = deviceDb.getDeviceFieldGroup(device, addDeviceFieldReq.groupId);
+        fieldGroup = deviceDb.getDeviceFieldGroup(device, addDeviceFieldReq.deviceField.groupId);
     } catch (e) {
         res.status(400);
         res.send(e.message)
         return;
     }
-    
+
+    if (fieldGroup.fields) {
+        let sameExists = false;
+        Object.keys(fieldGroup.fields).forEach(o => {
+            if (fieldGroup.fields[o].fieldName === addDeviceFieldReq.deviceField.fieldName) {
+                sameExists = true;
+            }
+        });
+        if(sameExists){
+            res.status(400);
+            res.send('Field with that name already exists');
+            console.log('x');
+            return;
+        }
+    }
 
     if (device.userAdminId != user.id) {
         res.status(400);
@@ -49,8 +63,14 @@ router.post('/', async (req, res) => {
         return;
     }
 
-
-    let id = await deviceDb.addDeviceField(addDeviceFieldReq.deviceId, addDeviceFieldReq.groupId, addDeviceFieldReq.deviceField);
+    try {
+        await deviceDb.addDeviceField(addDeviceFieldReq.deviceField);
+    } catch (e) {
+        res.status(400);
+        res.send(e.message)
+        return;
+    }
+    res.sendStatus(200);
 });
 
 module.exports = router;

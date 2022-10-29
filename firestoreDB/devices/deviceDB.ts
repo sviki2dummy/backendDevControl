@@ -1,7 +1,9 @@
 import { v4 as uuid } from 'uuid';
-import { IDevice, IDeviceField, IFieldGroup } from "../../models/basicModels";
+import { IDevice, IDeviceFieldBasic, IFieldGroup } from "../../models/basicModels";
 import { firestore, getFirebaseInstance } from '../firestore';
 import { getMaxIds, getMaxIDsInstance } from '../MaxIDs/MaxIDs';
+import { FieldValue } from 'firebase-admin/firestore';
+import { IAddDeviceFieldBasic } from '../../models/API/deviceCreateAlterReqRes';
 
 var deviceDBObj: DeviceDB;
 
@@ -20,6 +22,7 @@ export class DeviceDB {
 
     firestore: firestore;
     getMaxIds: getMaxIds;
+
     constructor() {
         this.firestore = getFirebaseInstance();
         this.getMaxIds = getMaxIDsInstance();
@@ -71,8 +74,8 @@ export class DeviceDB {
     async changeDeviceAdmin(deviceId: number, userId: number) {
         let device: IDevice = await this.getDevicebyId(deviceId);
         if (device.userAdminId === userId) {
-            throw({message: 'User is already the admin'});
-        } 
+            throw ({ message: 'User is already the admin' });
+        }
         await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
             userAdminId: userId,
         });
@@ -88,37 +91,46 @@ export class DeviceDB {
 
     async addDeviceFieldGroup(deviceId: number, groupName: string): Promise<number> {
         let device = await this.getDevicebyId(deviceId);
-        if (device.deviceFieldGroups.find(o => o.groupName === groupName)) {
-            throw ({ message: 'Group exists' });
-        };
         let newId = await this.getMaxIds.getMaxFieldGroupId(true);
         let newGroup: IFieldGroup = {
             id: newId,
             groupName: groupName,
             fields: [],
         }
-        device.deviceFieldGroups.push(newGroup);
+
         await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
-            deviceFieldGroups: {
-                newId: newGroup
-            }
-        })
+            [`deviceFieldGroups.${newId}`]: newGroup
+        });
         return newId;
     }
 
     async renameDeviceFieldGroup(deviceId: number, groupId: number, groupName: string) {
         let device = await this.getDevicebyId(deviceId);
         this.getDeviceFieldGroup(device, groupId);
+
         await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
-            deviceFieldGroups: {
-                groupId: {
-                    groupName: groupName,
-                }
-            }
+            [`deviceFieldGroups.${groupId}.groupName`]: groupName
+        });
+    }
+
+    async removeDeviceFieldGroup(deviceId: number, groupId: number) {
+        let device = await this.getDevicebyId(deviceId);
+        this.getDeviceFieldGroup(device, groupId);
+
+        await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
+            [`deviceFieldGroups.${groupId}`]: FieldValue.delete()
         })
     }
 
-    getDeviceField(fieldGroup: IFieldGroup, fieldId: number): IDeviceField {
+
+
+
+
+
+
+
+
+    getDeviceField(fieldGroup: IFieldGroup, fieldId: number): IDeviceFieldBasic {
         const field = fieldGroup.fields[fieldId];
         if (!field) {
             throw ({ message: 'Field doesn\'t exist' });
@@ -126,26 +138,18 @@ export class DeviceDB {
         return field;
     }
 
-    async addDeviceField(deviceId: number, groupId: number, deviceField: IDeviceField): Promise<number> {
-        let device = await this.getDevicebyId(deviceId);
-        this.getDeviceFieldGroup(device, groupId); //baci error ako nema
-        let newId = await this.getMaxIds.getMaxFieldId(true);
-        deviceField.id = newId;
+    async addDeviceField(deviceField: IAddDeviceFieldBasic): Promise<number> {
+        let device = await this.getDevicebyId(deviceField.deviceId);
+        this.getDeviceFieldGroup(device, deviceField.groupId); //baci error ako nema
 
-        if (deviceField.fieldName.length <= 15) {
-            throw ({ message: 'Field name too long (<=15 chars)' })
+        if (deviceField.fieldName.length >= 15) {
+            throw ({ message: 'Field name too long (>=15 chars)' })
         }
-        if (!deviceField.IO_Direction || !deviceField.fieldType) {
-            throw ({ message: 'wrong deviceField setup' })
-        }
-        await this.firestore.updateDocumentValue('devices', `${deviceId}`, {
-            deviceFieldGroups: {
-                devGroupId: {
-                    fields: {
-                        newId: deviceField
-                    }
-                }
-            }
+
+        let newId = await this.getMaxIds.getMaxFieldId(true);
+        deviceField['id'] = newId;
+        await this.firestore.updateDocumentValue('devices', `${deviceField.deviceId}`, {
+            [`deviceFieldGroups.${deviceField.groupId}.fields.${newId}`]: deviceField
         });
         return newId;
     }
@@ -158,7 +162,7 @@ export class DeviceDB {
             deviceFieldGroups: {
                 groupId: {
                     fields: {
-                        fieldId: {
+                        [fieldId]: {
                             fieldName: fieldName,
                         }
                     }
@@ -171,12 +175,12 @@ export class DeviceDB {
         let device = await this.getDevicebyId(deviceId);
         let groupField = this.getDeviceFieldGroup(device, groupId);
         this.getDeviceField(groupField, fieldId);
+        let fieldObj = {}
+        fieldObj[fieldId] = undefined;
         await this.firestore.updateDocumentValue(DeviceDB.devCollName, `${deviceId}`, {
             deviceFieldGroups: {
                 devGroupId: {
-                    fields: {
-                        newId: undefined,
-                    }
+                    fields: fieldObj //TODO ne valja sigurno
                 }
             }
         });

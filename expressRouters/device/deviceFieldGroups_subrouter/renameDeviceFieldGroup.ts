@@ -1,7 +1,8 @@
+import { rename } from "fs";
 import { createJsxClosingElement } from "typescript";
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
-import { IAddDeviceFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
+import { IRenameDeviceFieldGroup } from "../../../models/API/deviceCreateAlterReqRes";
 import { IDevice, IUser } from "../../../models/basicModels";
 
 var express = require('express');
@@ -15,11 +16,11 @@ var userDb: UsersDB = userDBfile.getUserDBInstance();
 
 
 router.post('/', async (req, res) => {
-    var addDeviceGroupFieldReq: IAddDeviceFieldGroup = req.body;
+    var renameDeviceGroupFieldReq: IRenameDeviceFieldGroup = req.body;
 
     let user: IUser;
     try {
-        user = await userDb.getUserByToken(addDeviceGroupFieldReq.authToken, true);
+        user = await userDb.getUserByToken(renameDeviceGroupFieldReq.authToken, true);
     } catch (e) {
         res.status(400);
         res.send(e.message);
@@ -28,7 +29,15 @@ router.post('/', async (req, res) => {
 
     let device: IDevice;
     try {
-        device = await deviceDb.getDevicebyId(addDeviceGroupFieldReq.deviceId);
+        device = await deviceDb.getDevicebyId(renameDeviceGroupFieldReq.deviceId);
+    } catch (e) {
+        res.status(400);
+        res.send(e.message)
+        return;
+    }
+
+    try {
+        deviceDb.getDeviceFieldGroup(device, renameDeviceGroupFieldReq.groupId);
     } catch (e) {
         res.status(400);
         res.send(e.message)
@@ -41,18 +50,8 @@ router.post('/', async (req, res) => {
         return;
     }
 
-    if (device.deviceFieldGroups) {
-        Object.keys(device.deviceFieldGroups).forEach(o => {
-            if (device.deviceFieldGroups[o].groupName === addDeviceGroupFieldReq.groupName) {
-                res.status(400);
-                res.send('Group with that name already exists');
-                return;
-            }
-        });
-    }
-
     try {
-        await deviceDb.addDeviceFieldGroup(addDeviceGroupFieldReq.deviceId, addDeviceGroupFieldReq.groupName);
+        await deviceDb.renameDeviceFieldGroup(renameDeviceGroupFieldReq.deviceId, renameDeviceGroupFieldReq.groupId, renameDeviceGroupFieldReq.groupName);
     } catch (e) {
         res.status(400);
         res.send(e.message)

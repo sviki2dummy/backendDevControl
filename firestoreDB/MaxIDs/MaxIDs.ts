@@ -3,7 +3,6 @@ import { firestore, getFirebaseInstance } from '../firestore';
 var maxIDsObj: getMaxIds;
 
 export function createMaxIDsInstance() {
-    console.log('create max id')
     maxIDsObj = new getMaxIds();
 }
 
@@ -32,9 +31,9 @@ export class getMaxIds {
     async setMaxDeviceId(id: number) { await this.setMax(this.deviceKey, id) }
 
     async getMaxFieldGroupId(autoIncrement: boolean): Promise<number> { return await this.getMax(this.fieldGroupKey, autoIncrement) }
-    async setMaxFieldGroupId(id: number) { await this.setMax(this.fieldKey, id) }
+    async setMaxFieldGroupId(id: number) { await this.setMax(this.fieldGroupKey, id) }
 
-    async getMaxFieldId(autoIncrement: boolean): Promise<number> { return await this.getMax(this.fieldGroupKey, autoIncrement) }
+    async getMaxFieldId(autoIncrement: boolean): Promise<number> { return await this.getMax(this.fieldKey, autoIncrement) }
     async setMaxFieldId(id: number) { await this.setMax(this.fieldKey, id) }
 
 

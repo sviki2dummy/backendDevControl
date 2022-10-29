@@ -1,4 +1,4 @@
-import { IDeviceField } from "../basicModels";
+import { IDeviceFieldBasic, IDeviceFieldButton, IDeviceFieldMultipleChoice, IDeviceFieldNumeric, IDeviceFieldRGB, IDeviceFieldText } from "../basicModels"
 
 export interface IAddDevice {
     deviceName: string
@@ -18,10 +18,12 @@ export interface IChangeDeviceAdminReq {
     userAdminId: number,
 }
 
-export interface IRemoveDevice {
+export interface IRemoveDeviceReq {
     deviceId: number,
     authToken: string,
 }
+
+
 
 
 
@@ -31,46 +33,41 @@ export interface IAddDeviceFieldGroup {
     groupName: string,
 }
 
-export interface IAddNumericDeviceField {
+export interface IRenameDeviceFieldGroup {
     authToken: string,
-
     deviceId: number,
     groupId: number,
+    groupName: string,
+}
 
+export interface IRemoveDeviceFieldGroup {
+    authToken: string,
+    deviceId: number,
+    groupId: number,
+}
+
+
+
+
+
+export interface IAddDeviceFieldReq {
+    authToken: string,
+    deviceField: IAddDeviceFieldBasic,
+    IO: 'input' | 'output',
+}
+
+export interface IAddDeviceFieldBasic {
+    deviceId: number,
+    groupId: number,
     fieldName: string,
-    IO_Direction: 'input' | 'output',
-    fieldValuePrefix: string,
-    fieldValueSufix: string,
 
-    fieldValue: number,
-    fieldControlType: 'slider' | 'upDownButtons',
-    minValue: number,
-    maxValue: number,
-    valueStep: number,
-}
-
-export interface IAddDeviceField {
-    authToken: string,
-    deviceId: number,
-    groupId: number,
-    deviceField: IDeviceField,
-}
-
-export interface IAddDeviceField {
-    authToken: string,
-    deviceId: number,
-    groupId: number,
-    deviceField: IDeviceField,
+    fieldType: 'numeric' | 'text' | 'button' | 'multipleChoice' | 'RGB',
+    fieldValue: IDeviceFieldNumeric | IDeviceFieldText | IDeviceFieldButton | IDeviceFieldMultipleChoice | IDeviceFieldRGB,
 }
 
 export interface IRemoveDeviceField {
     deviceId: number,
     groupId: number,
     fieldId: number,
-}
-
-export interface IRemoveDeviceFieldGroup {
-    deviceId: number,
-    groupId: number,
 }
 
