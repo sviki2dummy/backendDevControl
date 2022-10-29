@@ -1,52 +1,36 @@
+import { firestore } from "./firestoreDB/firestore";
+
 var express = require('express');
 var webSocketServer = require('websocket').server;
 var http = require('http');
-
 let port = process.env.PORT || 8000;
-
 let app = express();
-
 let server = http.createServer(app);
 
 let wsServer = new webSocketServer({
   httpServer: server,
 });
 
+var firestoreFile = require('./firestoreDB/firestore.ts');
+firestoreFile.createFirebaseInstance();
+var maxIDsfile = require('./firestoreDB/MaxIDs/MaxIDs');
+maxIDsfile.createMaxIDsInstance();
+var deviceDBfile = require('./firestoreDB/devices/deviceDB.ts');
+deviceDBfile.createDeviceDBInstance();
+var usersDBfile = require('./firestoreDB/users/userDB.ts');
+usersDBfile.createUserDBInstance();
 
-var firestore = require('./firestoreDB/firestore.ts');
-// firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
-// firestore.updateDocumentValue('users','Kristian', {name2: 'Kristian2'});
-// firestore.setDocumentValue('users','Kristian', {});
-// firestore.deleteDocument('users','Kristian'); 
-// firestore.updateDocumentValue('users/users2/users3','users4', {name: 'Kristian'});
+let firestoreDB: firestore = firestoreFile.getFirebaseInstance();
 
-
-//API
 app.get('/',(req,res) => {
   console.log('request:/');
   res.send('hello world!!!');
 });
 
-app.get('/x',(req,res) => {
-  console.log('request:/x');
-  res.send('xReq');
-});
-
-app.get('/combo',(req,res) => {
-  console.log('request:/combo');
-  res.send('combo');
-});
-
 app.get('/update',(req,res) => {
   console.log('request:/update');
-  firestore.updateDocumentValue('proba','Kristian', {name: 'Kristian', vrijeme: new Date()});
+  firestoreDB.updateDocumentValue('proba','Kristian', {name: 'L1', vrijeme: new Date()});
   res.send('update');
-
-});
-
-app.get('/ts',(req,res) => {
-  console.log('request:/ts');
-  res.send('typescript');
 });
 
 var mainRouter = require('./expressRouters/expressRouter.ts');
