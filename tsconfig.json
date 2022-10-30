@@ -1,20 +1,20 @@
 {
-  "compilerOptions": {
-      "module": "commonjs",
-      "esModuleInterop": true,
-      "target": "es6",
-      "noImplicitAny": true,
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "outDir": "dist",
-      "baseUrl": ".",
-      "paths": {
-          "*": [
-              "node_modules/*"
-          ]
-      }
-  },
-  "include": [
-      "/"
-  ]
+	"compilerOptions": {
+		"baseUrl": "src",
+		"lib": ["dom", "ES2022"],
+		"moduleResolution": "node",
+		"outDir": "lib",
+		"removeComments": false,
+		"rootDir": "src",
+		"sourceMap": true,
+		"target": "ES2022",
+
+		"alwaysStrict": false,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": false,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": false,
+		"strictNullChecks": true
+	}
 }

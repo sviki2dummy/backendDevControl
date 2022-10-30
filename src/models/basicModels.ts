@@ -90,4 +90,3 @@ export interface IDeviceFieldRGB {
     B: number,
     IO: 'input'
 }
-

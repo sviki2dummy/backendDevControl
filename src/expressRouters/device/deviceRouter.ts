@@ -37,10 +37,9 @@ router.use('/deleteField', deleteField);
 
 
 
-import { DeviceDB } from "../../firestoreDB/devices/deviceDB";
-var deviceDBfile = require('../../firestoreDB/devices/deviceDB.ts');
-var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
-router.get('/:id', async (req, res) => {
+import { deviceDBSingletonFactory } from "../../firestoreDB/singletonService";
+var deviceDb = deviceDBSingletonFactory.getInstance();
+router.get('/:id', async (req: any, res: any) => {
     let id = req.params.id;
     console.log(id);
 

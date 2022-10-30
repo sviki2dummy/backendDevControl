@@ -7,12 +7,11 @@ var router = express.Router();
 var usersDBfile = require('../../../firestoreDB/users/userDB.ts')
 var userDB: UsersDB = usersDBfile.getUserDBInstance();
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: any, res: any) => {
     console.log(req.body);
     let registerReq: IRegisterRequest = req.body;
-    let id;
     try {
-        id = await userDB.addUser(registerReq.username, registerReq.password, registerReq.email);
+        await userDB.addUser(registerReq.username, registerReq.password, registerReq.email);
         let loginResponse = (await userDB.loginUserByCreds(registerReq.username, registerReq.password));
         res.json(loginResponse);
     }

@@ -7,7 +7,7 @@ var router = express.Router();
 var userDBfile = require('../../../firestoreDB/users/userDB');
 var userDB: UsersDB = userDBfile.getUserDBInstance();
 
-router.post('/creds', async (req, res) => {
+router.post('/creds', async (req: any, res: any) => {
     const loginReq: ILoginRequest = req.body;
 
     let loginResponse: ILoginResponse;
@@ -21,7 +21,7 @@ router.post('/creds', async (req, res) => {
     res.json(loginResponse);
 });
 
-router.post('/token', async (req, res) => {
+router.post('/token', async (req: any, res: any) => {
     const loginReq: ILoginByTokenRequest = req.body;
 
     let loginResponse = {} as ILoginResponse;

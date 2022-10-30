@@ -1,4 +1,5 @@
-import { firestore, getFirebaseInstance } from '../firestore';
+import { firestoreSingletonFactory } from '../singletonService';
+import { FirestoreDB } from '../firestore';
 
 var maxIDsObj: getMaxIds;
 
@@ -19,9 +20,9 @@ export class getMaxIds {
     private fieldGroupKey = 'fieldGroup';
     private fieldKey = 'field';
 
-    firestore: firestore;
+    firestore: FirestoreDB;
     constructor() {
-        this.firestore = getFirebaseInstance();
+        this.firestore = firestoreSingletonFactory.getInstance();
     }
 
     async getMaxUserId(autoIncrement: boolean): Promise<number> {return await this.getMax(this.userKey, autoIncrement)}

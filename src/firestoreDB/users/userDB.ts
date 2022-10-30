@@ -1,9 +1,10 @@
 import { IAuthToken, IUser } from '../../models/basicModels';
-import { getMaxIds, getMaxIDsInstance } from '../MaxIDs/MaxIDs';
-import { firestore, getFirebaseInstance } from '../firestore';
+import { getMaxIds } from '../MaxIDs/MaxIDs';
 import { ILoginResponse } from '../../models/API/loginRegisterReqRes';
 import { v4 as uuid } from 'uuid';
 import { addDaysToCurrentTime, hasTimePASSED } from '../../generalStuff/timeHandlers';
+import { firestoreSingletonFactory } from '../singletonService';
+import { FirestoreDB } from 'firestoreDB/firestore';
 
 
 var userDBObj: UsersDB;
@@ -20,11 +21,11 @@ export class UsersDB {
     static usersCollName = 'users';
     static authTokenCollName = 'authTokens';
 
-    firestore: firestore;
+    firestore: FirestoreDB;
     getMaxIds: getMaxIds;
     constructor() {
-        this.firestore = getFirebaseInstance();
-        this.getMaxIds = getMaxIDsInstance();
+        this.firestore = firestoreSingletonFactory.getInstance();
+        // this.getMaxIds = getMaxIDSingletonFactory.getInstance();
     }
 
     async getUsers(): Promise<IUser[]> {

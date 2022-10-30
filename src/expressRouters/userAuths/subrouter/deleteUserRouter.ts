@@ -1,4 +1,3 @@
-import { runInNewContext } from 'vm';
 import { DeviceDB } from '../../../firestoreDB/devices/deviceDB';
 import { UsersDB } from '../../../firestoreDB/users/userDB';
 import { IDeleteUserRequest } from '../../../models/API/loginRegisterReqRes';
@@ -12,15 +11,15 @@ var userDB: UsersDB = userDBfile.getUserDBInstance();
 var deviceDBfile = require('../../../firestoreDB/devices/deviceDB');
 var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: any, res: any) => {
     const deleteReq: IDeleteUserRequest = req.body;
     let devices = await deviceDb.getDevices()
     let user = await userDB.getUserByToken(deleteReq.authToken, false);
 
-    let isAdmin: boolean;
+    let isAdmin: boolean = false;
     devices.forEach(device => {
         if (device.userAdminId == user.id) isAdmin = true;
-    })
+    });
     if (isAdmin) {
         res.status(400);
         res.send('User is admin');

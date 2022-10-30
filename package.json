@@ -5,11 +5,12 @@
     "node": ">=15 <19"
   },
   "description": "",
-  "main": "index.ts",
-  "type": "module",
+  "main": "src/index.ts",
+  "module": "es6",
+  "target": "es5",
   "scripts": {
-    "start": "node index.js",
-    "devStart": "nodemon index.js"
+    "start": "node src/index.ts",
+    "devStart": "nodemon src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +28,8 @@
     "@types/body-parser": "^1.16.8",
     "@types/express": "^4.17.14",
     "@types/node": "^16.18.2",
+    "@types/uuid": "^8.3.4",
+    "@types/websocket": "^1.0.5",
     "chai": "^4.0.0",
     "del-cli": "^5.0.0",
     "mocha": "^10.1.0",

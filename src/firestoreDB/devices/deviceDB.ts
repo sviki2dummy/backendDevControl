@@ -1,9 +1,10 @@
 import { v4 as uuid } from 'uuid';
 import { IDevice, IDeviceFieldBasic, IFieldGroup } from "../../models/basicModels";
-import { firestore, getFirebaseInstance } from '../firestore';
-import { getMaxIds, getMaxIDsInstance } from '../MaxIDs/MaxIDs';
+import { FirestoreDB } from '../firestore';
+import { getMaxIds } from '../MaxIDs/MaxIDs';
 import { FieldValue } from 'firebase-admin/firestore';
 import { IAddFieldBasic } from '../../models/API/deviceCreateAlterReqRes';
+import { firestoreSingletonFactory, getMaxIDSingletonFactory } from '../singletonService';
 
 var deviceDBObj: DeviceDB;
 
@@ -20,12 +21,12 @@ export class DeviceDB {
     static devCollName = 'devices';
     static usersCollName = 'users';
 
-    firestore: firestore;
+    firestore: FirestoreDB;
     getMaxIds: getMaxIds;
 
     constructor() {
-        this.firestore = getFirebaseInstance();
-        this.getMaxIds = getMaxIDsInstance();
+        this.firestore = firestoreSingletonFactory.getInstance();
+        this.getMaxIds = getMaxIDSingletonFactory.getInstance();
     }
 
     async getDevices(): Promise<IDevice[]> {
@@ -149,11 +150,19 @@ export class DeviceDB {
         if (deviceField.fieldName.length >= 15) {
             throw ({ message: 'Field name too long (>=15 chars)' })
         }
-
         let newId = await this.getMaxIds.getMaxFieldId(true);
-        deviceField['id'] = newId;
+
+        let field: IDeviceFieldBasic = {
+            deviceId: deviceField.deviceId,
+            groupId: deviceField.groupId,
+            id: newId,
+            fieldName: deviceField.fieldName,
+            fieldType: deviceField.fieldType,
+            fieldValue: deviceField.fieldValue,
+        }
+
         await this.firestore.updateDocumentValue('devices', `${deviceField.deviceId}`, {
-            [`deviceFieldGroups.${deviceField.groupId}.fields.${newId}`]: deviceField
+            [`deviceFieldGroups.${deviceField.groupId}.fields.${newId}`]: field
         });
         return newId;
     }

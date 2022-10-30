@@ -1,27 +1,20 @@
-var firebaseObj: firestore;
+var admin = require('firebase-admin');
 
-export function createFirebaseInstance() {
-  firebaseObj = new firestore();
-}
-
-export function getFirebaseInstance(): firestore{
-  return firebaseObj;
-}
-
-export class firestore {
+export class FirestoreDB {
 
   private db: any;
 
   constructor() {
     console.log('firestore constructor');
-    var admin = require('firebase-admin');
+
     var serviceAccount;
     try {
+      if (!process.env.firebaseKey) throw ("");
       serviceAccount = JSON.parse(process.env.firebaseKey);
     } catch {
       console.log('failed to get env.port.firebaseKey');
       console.log('looking for file in firebase.json')
-      serviceAccount = require('../firebaseKey.json')
+      serviceAccount = require('../../firebaseKey.json')
     }
 
     admin.initializeApp({
@@ -31,11 +24,11 @@ export class firestore {
     this.db.settings({ ignoreUndefinedProperties: true })
   }
 
-  async setDocumentValue(collectionPath: string, documentName: string, value) {
+  async setDocumentValue(collectionPath: string, documentName: string, value: any) {
     return await this.db.collection(collectionPath).doc(documentName).set(value);
   }
 
-  async updateDocumentValue(collectionPath: string, documentName: string, value) {
+  async updateDocumentValue(collectionPath: string, documentName: string, value: any) {
     return await this.db.collection(collectionPath).doc(documentName).update(value);
   }
 
@@ -51,8 +44,8 @@ export class firestore {
 
   async getCollectionData(collectionPath: string): Promise<any[]> {
     let collection = await this.db.collection(collectionPath).get();
-    let data = [];
-    collection.forEach(doc => {
+    let data: any[] = [];
+    collection.forEach((doc: { data: () => any; }) => {
       data.push(doc.data());
     });
     return data;
@@ -66,7 +59,7 @@ export class firestore {
     return this.db.collection(collectionPath).doc(documentName);
   }
 
-  async test(){
+  async test() {
     await this.db.collection('devices').doc('1').update({ [`deviceFieldGroups.${"hello"}.xx`]: true })
   }
 
