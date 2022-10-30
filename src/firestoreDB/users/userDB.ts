@@ -3,7 +3,7 @@ import { getMaxIds } from '../MaxIDs/MaxIDs';
 import { ILoginResponse } from '../../models/API/loginRegisterReqRes';
 import { v4 as uuid } from 'uuid';
 import { addDaysToCurrentTime, hasTimePASSED } from '../../generalStuff/timeHandlers';
-import { firestoreSingletonFactory } from '../singletonService';
+import { firestoreSingletonFactory, getMaxIDSingletonFactory } from '../singletonService';
 import { FirestoreDB } from 'firestoreDB/firestore';
 
 
@@ -25,7 +25,7 @@ export class UsersDB {
     getMaxIds: getMaxIds;
     constructor() {
         this.firestore = firestoreSingletonFactory.getInstance();
-        // this.getMaxIds = getMaxIDSingletonFactory.getInstance();
+        this.getMaxIds = getMaxIDSingletonFactory.getInstance();
     }
 
     async getUsers(): Promise<IUser[]> {

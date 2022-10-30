@@ -1,20 +1,20 @@
-import { DeviceDB } from '../../../firestoreDB/devices/deviceDB';
-import { UsersDB } from '../../../firestoreDB/users/userDB';
+import { DeviceDB } from 'firestoreDB/devices/deviceDB';
+import { deviceDBSingletonFactory, usersDBSingletonFactory } from '../../../firestoreDB/singletonService';
+import { UsersDB } from 'firestoreDB/users/userDB';
 import { IDeleteUserRequest } from '../../../models/API/loginRegisterReqRes';
 
 var express = require('express');
 var router = express.Router();
 
-var userDBfile = require('../../../firestoreDB/users/userDB');
-var userDB: UsersDB = userDBfile.getUserDBInstance();
+var deviceDb: DeviceDB = deviceDBSingletonFactory.getInstance();
+var userDb: UsersDB = usersDBSingletonFactory.getInstance();
 
-var deviceDBfile = require('../../../firestoreDB/devices/deviceDB');
-var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
 
 router.post('/', async (req: any, res: any) => {
+
     const deleteReq: IDeleteUserRequest = req.body;
     let devices = await deviceDb.getDevices()
-    let user = await userDB.getUserByToken(deleteReq.authToken, false);
+    let user = await userDb.getUserByToken(deleteReq.authToken, false);
 
     let isAdmin: boolean = false;
     devices.forEach(device => {
@@ -25,7 +25,7 @@ router.post('/', async (req: any, res: any) => {
         res.send('User is admin');
         return;
     }
-    let loginResponse = (await userDB.deleteUser(deleteReq.authToken));
+    let loginResponse = (await userDb.deleteUser(deleteReq.authToken));
     res.json(loginResponse);
 });
 

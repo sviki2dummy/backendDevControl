@@ -1,3 +1,4 @@
+import { deviceDBSingletonFactory, usersDBSingletonFactory } from "../../../firestoreDB/singletonService";
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
 import { IAddDeviceReq } from "../../../models/API/deviceCreateAlterReqRes";
@@ -5,13 +6,10 @@ import { IAddDeviceReq } from "../../../models/API/deviceCreateAlterReqRes";
 var express = require('express');
 var router = express.Router();
 
-var deviceDBfile = require('../../../firestoreDB/devices/deviceDB.ts');
-var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
+var deviceDb: DeviceDB = deviceDBSingletonFactory.getInstance();
+var userDb: UsersDB = usersDBSingletonFactory.getInstance();
 
-var userDBfile = require('../../../firestoreDB/users/userDB.ts');
-var userDb: UsersDB = userDBfile.getUserDBInstance();
-
-router.post('/', async (req, res) => {
+router.post('/', async (req: any, res: any) => {
     var addDeviceReq: IAddDeviceReq = req.body;
     try {
         await userDb.getUserbyId(addDeviceReq.userAdminId);

@@ -1,3 +1,4 @@
+import { deviceDBSingletonFactory, usersDBSingletonFactory } from "../../../firestoreDB/singletonService";
 import { DeviceDB } from "../../../firestoreDB/devices/deviceDB";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
 import { IChangeDeviceAdminReq } from "../../../models/API/deviceCreateAlterReqRes";
@@ -5,13 +6,11 @@ import { IChangeDeviceAdminReq } from "../../../models/API/deviceCreateAlterReqR
 var express = require('express');
 var router = express.Router();
 
-var deviceDBfile = require('../../../firestoreDB/devices/deviceDB.ts');
-var deviceDb: DeviceDB = deviceDBfile.getDeviceDBInstance();
+var deviceDb: DeviceDB = deviceDBSingletonFactory.getInstance();
+var userDb: UsersDB = usersDBSingletonFactory.getInstance();
 
-var userDBfile = require('../../../firestoreDB/users/userDB.ts');
-var userDb: UsersDB = userDBfile.getUserDBInstance();
+router.post('/', async (req: any, res: any) => {
 
-router.post('/', async (req, res) => {
     var changeDeviceAdminReq: IChangeDeviceAdminReq = req.body;
     try {
         await userDb.getUserByToken(changeDeviceAdminReq.authToken, true);
@@ -20,7 +19,7 @@ router.post('/', async (req, res) => {
         res.send(e.message);
         return;
     }
-    
+
     try {
         await userDb.getUserbyId(changeDeviceAdminReq.userAdminId);
     } catch (e) {

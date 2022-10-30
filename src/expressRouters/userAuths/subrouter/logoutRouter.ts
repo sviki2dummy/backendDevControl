@@ -1,15 +1,15 @@
+import { usersDBSingletonFactory } from "../../../firestoreDB/singletonService";
 import { UsersDB } from "../../../firestoreDB/users/userDB";
 import { ILogoutRequest } from "../../../models/API/loginRegisterReqRes";
 
 var express = require('express');
 var router = express.Router();
 
-var userDBfile = require('../../../firestoreDB/users/userDB');
-var userDB: UsersDB = userDBfile.getUserDBInstance();
+var userDb: UsersDB = usersDBSingletonFactory.getInstance();
 
-router.get('/', async (req, res) => {
+router.post('/', async (req: any, res: any) => {
     let logoutRequest: ILogoutRequest = req.body;
-    await userDB.removeToken(logoutRequest.authToken);
+    await userDb.removeToken(logoutRequest.authToken);
     res.sendStatus(200);
 })
 
