@@ -1,6 +1,9 @@
 {
   "name": "devcontrol-backend",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=15 <19"
+  },
   "description": "",
   "main": "index.ts",
   "type": "commonjs",
