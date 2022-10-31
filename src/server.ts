@@ -22,7 +22,7 @@ export class Server {
         this.setupRoutes();
         this.setupWSS();
         this.startServer();
-        this.startTimeout();
+        // this.startTimeout();
     }
 
     setConfig() {
@@ -86,29 +86,26 @@ export class Server {
 
 
     startTimeout() {
-
+        const https = require('https');
         setInterval(() => {
 
-            var options = {
-                host: 'devcontrol-backend-proba1.onrender.com',
-                path: '/test1',
-                //This is the only line that is new. `headers` is an object with the headers to request
-                headers: { 'custom': 'Custom Header Demo works' }
-            };
 
-            var callback = function (response) {
-                var str = ''
-                response.on('data', function (chunk) {
-                    str += chunk;
-                });
-
-                response.on('end', function () {
-                    console.log(str);
-                });
-            }
-
-            var req = http.request(options, callback);
-            req.end();
+            https.get('https://devcontrol-backend-proba1.onrender.com/test2', (resp) => {
+              let data = '';
+            
+              // A chunk of data has been received.
+              resp.on('data', (chunk) => {
+                data += chunk;
+              });
+            
+              // The whole response has been received. Print out the result.
+              resp.on('end', () => {
+                console.log(data);
+              });
+            
+            }).on("error", (err) => {
+              console.log("Error: " + err.message);
+            });
         }, 5 * 1000);
     }
 }
