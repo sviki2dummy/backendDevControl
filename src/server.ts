@@ -12,27 +12,28 @@ export class Server {
 
     private app: Express.Application;
     private wsServer: webSocketServer;
+    server: any;
 
     constructor() {
         this.app = Express();
         this.setConfig();
-        this.setupWSS();
         this.setupRoutes();
+        this.setupWSS();
         this.startServer();
     }
 
     setConfig() {
-        let server = http.createServer(this.app);
+        this.server = http.createServer(this.app);
         this.wsServer = new webSocketServer({
-            httpServer: server,
+            httpServer: this.server,
         });
     }
 
     setupRoutes() {
-        this.app.get('/', (req: any, res: any) => {
-            console.log('request:/');
-            res.send('hello world!!!');
-        });
+        // this.app.get('/', (req: any, res: any) => {
+        //     console.log('request:/');
+        //     res.send('hello world!!!');
+        // });
 
         this.app.get('/update', (req: any, res: any) => {
             console.log('request:/update');
@@ -45,7 +46,7 @@ export class Server {
     }
 
     startServer() {
-        this.app.listen(this.port, () => {
+        this.server.listen(this.port, () => {
             console.log('listening on port ' + this.port);
         });
     }
