@@ -2,14 +2,14 @@
   "name": "devcontrol-backend",
   "version": "1.0.0",
   "engines": {
-    "node": ">=15 <19"
+    "node": ">=15 <18"
   },
   "description": "",
   "main": "src/index.ts",
   "module": "es6",
   "target": "es5",
   "scripts": {
-    "start": "node src/index.ts",
+    "start": "ts-node src/index.ts",
     "devStart": "nodemon src/index.ts"
   },
   "author": "",
