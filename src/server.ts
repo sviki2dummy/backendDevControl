@@ -4,10 +4,12 @@ import { server as webSocketServer } from 'websocket';
 import { v4 as uuid } from 'uuid';
 import { firestoreSingletonFactory } from './firestoreDB/singletonService';
 let http = require('http');
-
+let cors = require('cors');
 
 
 export class Server {
+
+    testPath = '/test2';
     port = process.env.PORT || 8000;
 
     private app: Express.Application;
@@ -20,6 +22,7 @@ export class Server {
         this.setupRoutes();
         this.setupWSS();
         this.startServer();
+        this.startTimeout();
     }
 
     setConfig() {
@@ -27,12 +30,18 @@ export class Server {
         this.wsServer = new webSocketServer({
             httpServer: this.server,
         });
+
+        var bodyParser = require('body-parser');
+
+        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.json());
+        this.app.use(cors());
     }
 
     setupRoutes() {
-        this.app.get('/test1', (req: any, res: any) => {
-            console.log('request:/test1');
-            res.send('hello world!!!');
+        this.app.get(this.testPath, (req: any, res: any) => {
+            console.log(`request:${this.testPath}`);
+            res.send(`request:${this.testPath}`);
         });
 
         this.app.get('/update', (req: any, res: any) => {
@@ -73,5 +82,33 @@ export class Server {
                 }
             })
         });
+    }
+
+
+    startTimeout() {
+
+        setInterval(() => {
+
+            var options = {
+                host: 'devcontrol-backend-proba1.onrender.com',
+                path: '/test1',
+                //This is the only line that is new. `headers` is an object with the headers to request
+                headers: { 'custom': 'Custom Header Demo works' }
+            };
+
+            var callback = function (response) {
+                var str = ''
+                response.on('data', function (chunk) {
+                    str += chunk;
+                });
+
+                response.on('end', function () {
+                    console.log(str);
+                });
+            }
+
+            var req = http.request(options, callback);
+            req.end();
+        }, 5 * 1000);
     }
 }
