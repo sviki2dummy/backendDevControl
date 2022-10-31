@@ -44,6 +44,11 @@ export class Server {
             res.send(`request:${this.testPath}`);
         });
 
+        this.app.get('/dummy', (req: any, res: any) => {
+            console.log('request:/dummy');
+            res.send('dummy');
+        });
+
         this.app.get('/update', (req: any, res: any) => {
             console.log('request:/update');
             firestoreSingletonFactory.getInstance().updateDocumentValue('proba', 'Kristian', { name: 'L2', vrijeme: new Date() });
