@@ -55,7 +55,9 @@ export class Server {
 
         let i = 0;
         let links: string[] = [];
-        links.push('https://devcontrol-backend-proba1.onrender.com/dummy')
+        links.push('https://devcontrol-backend-proba1.onrender.com/dummy');
+//         links.push('https://dummyexpressapp1.onrender.com/dummy');
+        links.push('https://dummyexpressapp2.onrender.com/dummy');
 
         let interval = (10*1000)/links.length;
         setInterval(async () => {
