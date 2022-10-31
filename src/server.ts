@@ -30,10 +30,10 @@ export class Server {
     }
 
     setupRoutes() {
-        // this.app.get('/', (req: any, res: any) => {
-        //     console.log('request:/');
-        //     res.send('hello world!!!');
-        // });
+        this.app.get('/test1', (req: any, res: any) => {
+            console.log('request:/test1');
+            res.send('hello world!!!');
+        });
 
         this.app.get('/update', (req: any, res: any) => {
             console.log('request:/update');
